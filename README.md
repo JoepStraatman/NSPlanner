@@ -38,3 +38,6 @@ die doen bijna hetzelfde maar kunnen alleen vooraf geselecteerde routes tonen. B
 Hardest:
 met maps werken (nooit gedaan)
 voorgestelde opties voor stations geven.
+
+
+![alt text](https://github.com/JoepStraatman/NSPlanner/blob/master/doc/schets.png?raw=true)
