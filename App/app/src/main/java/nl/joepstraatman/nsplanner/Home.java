@@ -6,18 +6,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Home extends AppCompatActivity {
+public class Home extends AppCompatActivity implements View.OnClickListener{
     private FirebaseAuth authTest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         authTest = FirebaseAuth.getInstance();
-
+        Button fav = findViewById(R.id.Favoriet);
+        Button nieuw = findViewById(R.id.Nieuw);
+        fav.setOnClickListener(this);
+        nieuw.setOnClickListener(this);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -37,5 +42,12 @@ public class Home extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), Login.class);
         startActivity(intent);
         finish();
+    }
+    public void onClick(View v) {
+        if (v.getId() == R.id.Favoriet) {
+            startActivity(new Intent(Home.this, Favorieten.class));finish();
+        } else if (v.getId() == R.id.Nieuw) {
+            startActivity(new Intent(Home.this, Reis.class));finish();
+        }
     }
 }
