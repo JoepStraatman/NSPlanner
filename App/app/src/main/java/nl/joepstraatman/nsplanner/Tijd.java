@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -16,6 +17,11 @@ public class Tijd extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tijd);
         authTest = FirebaseAuth.getInstance();
+        Bundle extras = getIntent().getExtras();
+        String naam = extras.getString("name");
+        TextView titel = findViewById(R.id.titel);
+        titel.setText(naam.toString());
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -35,5 +41,10 @@ public class Tijd extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), Login.class);
         startActivity(intent);
         finish();
+    }
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, Reis.class));finish();
+        super.onBackPressed();
     }
 }

@@ -36,4 +36,9 @@ public class Favorieten extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, Home.class));finish();
+        super.onBackPressed();
+    }
 }
