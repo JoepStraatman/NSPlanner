@@ -16,7 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Home"></activity>
+        <activity android:name=".Home" />
+        <activity android:name=".Reis" />
+        <activity android:name=".Tijd" />
+        <activity android:name=".Route" />
+        <activity android:name=".Overstap" />
+        <activity android:name=".Looproute" />
+        <activity android:name=".Favorieten"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "597204819400",
+    "firebase_url": "https://nsplanner-19196.firebaseio.com",
+    "project_id": "nsplanner-19196",
+    "storage_bucket": "nsplanner-19196.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:597204819400:android:7d71197688b51d7e",
+        "android_client_info": {
+          "package_name": "nl.joepstraatman.nsplanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "597204819400-ug0vcc8ov49csgmv672nsika99mn3doc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "nl.joepstraatman.nsplanner",
+            "certificate_hash": "b435c53f357c5d78a79dc8da7e33db923280674f"
+          }
+        },
+        {
+          "client_id": "597204819400-lilvf0i788g48pplv1orgf5vtv0k4dmm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtC3zpEPjYZcyMShukJLhTuJI_tNofLns"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "597204819400-lilvf0i788g48pplv1orgf5vtv0k4dmm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
