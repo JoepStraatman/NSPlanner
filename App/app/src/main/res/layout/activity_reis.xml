@@ -52,11 +52,11 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/station1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:layout_marginBottom="15dp"
+            android:ems="10"
             android:inputType="textPersonName" />
 
         <TextView
@@ -69,11 +69,11 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/station2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:layout_marginBottom="30dp"
+            android:ems="10"
             android:inputType="textPersonName" />
     </LinearLayout>
     <LinearLayout

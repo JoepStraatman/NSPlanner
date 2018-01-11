@@ -15,10 +15,14 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class Reis extends AppCompatActivity implements View.OnClickListener{
     private FirebaseAuth authTest;
+    EditText station1;
+    EditText station2;
+    EditText naam;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reis);
+        makeviews();
         authTest = FirebaseAuth.getInstance();
         Button zoek = findViewById(R.id.zoek);
         Button verwijder = findViewById(R.id.verwijder);
@@ -51,18 +55,23 @@ public class Reis extends AppCompatActivity implements View.OnClickListener{
     }
     public void onClick(View v) {
         if (v.getId() == R.id.zoek) {
-            EditText naam = findViewById(R.id.naam);
-            String naamtxt = naam.getText().toString();
-            if (naamtxt.equals("")){
-                Toast.makeText(this, "Geen naam ingevuld!",Toast.LENGTH_SHORT).show();
+            if (naam.getText().toString().equals("") || station1.getText().toString().equals("") || station2.getText().toString().equals("")){
+                Toast.makeText(this, "Er mist een veld!",Toast.LENGTH_SHORT).show();
             }else{
                 Intent i = new Intent(this, Tijd.class);
                 i.putExtra("name", naam.getText().toString());
+                i.putExtra("van", station1.getText().toString());
+                i.putExtra("naar", station2.getText().toString());
                 startActivity(i);
-                finish();
-            }
+                finish();}
         } else if (v.getId() == R.id.verwijder) {
             startActivity(new Intent(Reis.this, Home.class));finish();
         }
     }
+    public void makeviews(){
+        station1 = findViewById(R.id.station1);
+        station2 = findViewById(R.id.station2);
+        naam = findViewById(R.id.naam);
+    }
+
 }
