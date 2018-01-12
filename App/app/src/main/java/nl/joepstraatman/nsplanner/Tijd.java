@@ -47,7 +47,8 @@ public class Tijd extends AppCompatActivity {
     }
     public void laadDataIn(){
         Bundle extras = getIntent().getExtras();
-        String naam = extras.getString("name");
+        if (extras.getString("van") != null){
+        String naam = extras.getString("name");}
         String van = extras.getString("van");
         String naar = extras.getString("naar");
         station1 = findViewById(R.id.van);

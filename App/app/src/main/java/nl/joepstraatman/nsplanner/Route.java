@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Route extends AppCompatActivity {
+public class Route extends AppCompatActivity{
     private FirebaseAuth authTest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,4 +39,5 @@ public class Route extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
 }
