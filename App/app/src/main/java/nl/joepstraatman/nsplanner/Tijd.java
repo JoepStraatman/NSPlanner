@@ -1,8 +1,10 @@
 package nl.joepstraatman.nsplanner;
 
 import android.content.Intent;
+import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,10 +15,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -25,13 +30,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.provider.Telephony.Carriers.PASSWORD;
 
 public class Tijd extends AppCompatActivity {
     private FirebaseAuth authTest;
     TextView station1;
     TextView station2;
     //test url:
-    private String url = "https://webservices.ns.nl/ns-api-avt?station=amsterdam";
+    private String url = "http://webservices.ns.nl/ns-api-treinplanner?fromStation=Utrecht+Centraal&toStation=Amsterdam+centraal";
     public JSONArray ja_data = null;
     ArrayList<String> listdata;
     @Override
@@ -78,18 +87,30 @@ public class Tijd extends AppCompatActivity {
         station2.setText(naar.toString());
     }
     //requestque:
-
     public void openCategory() {//Create a new volley request to the api.
         RequestQueue queue = Volley.newRequestQueue(this);
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET, url, null, new com.android.volley.Response.Listener<JSONObject>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(String response) {
                 saveToAdapter(response);
             }}, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println(error);}
-        });
+        })
+        {
+          @Override
+          public Map<String, String> getHeaders() throws AuthFailureError {
+              HashMap<String, String> params = new HashMap<String, String>();
+              params.put("Content-Type", "application/json");
+              String creds = String.format("%s:%s","straatmanjoep@gmail.com","bnjf-LP20gR1WNnYeZ2RYyDvYItt-PtN2Go1ulSipoWfrY42SIuhHA");
+              String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.NO_WRAP);
+              params.put("Authorization", auth);
+              return params;
+          }
+        };
+
+
         queue.add(stringRequest);// Add the request to the RequestQueue.
         listClick();
     }
@@ -107,9 +128,9 @@ public class Tijd extends AppCompatActivity {
             }
         });
     }
-    public void saveToAdapter(JSONObject response){ //Set the questions to the listview adapter
+    public void saveToAdapter(String response){ //Set the questions to the listview adapter
         listdata = new ArrayList<>();  // load data from file
-        Toast.makeText(Tijd.this, response.toString(),
+        Toast.makeText(Tijd.this, response,
                 Toast.LENGTH_LONG).show();
         /*try {
             JSONObject jsonObj = new JSONObject(response.toString());
