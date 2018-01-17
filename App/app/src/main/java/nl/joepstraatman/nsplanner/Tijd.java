@@ -1,5 +1,6 @@
 package nl.joepstraatman.nsplanner;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,14 +32,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Tijd extends AppCompatActivity {
+public class Tijd extends Activity {
+
     private FirebaseAuth authTest;
     TextView station1;
     TextView station2;
     //test url:
     private String url = "http://webservices.ns.nl/ns-api-treinplanner?fromStation=Utrecht+Centraal&toStation=Amsterdam+centraal";
     public JSONArray ja_data = null;
-    ArrayList<String> listdata;
+    public String[] vertrek;
+    public String[] aankomst;
+    public String[] reistijd;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,11 +53,13 @@ public class Tijd extends AppCompatActivity {
         laadDataIn();
         openCategory();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.mybutton) {
@@ -59,6 +67,7 @@ public class Tijd extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     public void logout(){ //Go to the Main class. Called after login is complete.
         authTest.signOut();
         Log.d("Signout", "onAuthStateChanged:signed_out2");
@@ -66,11 +75,13 @@ public class Tijd extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
     @Override
     public void onBackPressed() {
         startActivity(new Intent(this, Reis.class));finish();
         super.onBackPressed();
     }
+
     public void laadDataIn(){
         Bundle extras = getIntent().getExtras();
         if (extras.getString("van") != null){
@@ -88,7 +99,7 @@ public class Tijd extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                saveToAdapter(response);
+                jsonparser(response);
             }}, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -104,26 +115,9 @@ public class Tijd extends AppCompatActivity {
             return params;}
         };
         queue.add(stringRequest);// Add the request to the RequestQueue.
-        listClick();
+
     }
-    public void listClick() { //On listview item click go to a new activity and open the question.
-        final ListView list = findViewById(R.id.tijden);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                try {
-                    JSONObject arrayPicked = new JSONObject(ja_data.getString(position));
-                    Intent intent = new Intent(Tijd.this, Route.class);
-                    intent.putExtra("item", arrayPicked.toString());
-                    startActivity(intent);finish();
-                }catch (JSONException e){throw new RuntimeException(e);}
-            }
-        });
-    }
-    public void saveToAdapter(String response){ //Set the questions to the listview adapter
-        listdata = new ArrayList<>();  // load data from file
-        Toast.makeText(Tijd.this, response,
-                Toast.LENGTH_LONG).show();
+    public void jsonparser(String response){ //Set the questions to the listview adapter  // load data from file
         String newResponse = printResponse(response);
         try {
             JSONObject newjsonObj = new JSONObject(newResponse);
@@ -133,10 +127,6 @@ public class Tijd extends AppCompatActivity {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }getQuestion();
-        ArrayList<String> myArray = listdata;
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(Tijd.this, R.layout.list_layout, myArray);
-        final ListView list = findViewById(R.id.tijden);
-        list.setAdapter(adapter);
     }
 
     public String printResponse(String response) {// parse the xml response to json
@@ -153,11 +143,36 @@ public class Tijd extends AppCompatActivity {
     public void getQuestion(){//Get the questions from the response.
         JSONArray jArray = ja_data;
         if (jArray != null) {
+            vertrek = new String[jArray.length()];
+            aankomst = new String[jArray.length()];
+            reistijd = new String[jArray.length()];
             for (int i = 0; i < jArray.length(); i++) {try {
                 JSONObject jsonArray2 = new JSONObject(jArray.getString(i));
-                listdata.add(jsonArray2.toString());
+                vertrek[i] = (jsonArray2.getString("GeplandeVertrekTijd").substring(11,16));
+                aankomst[i] = (jsonArray2.getString("GeplandeAankomstTijd").substring(11,16));
+                reistijd[i] = (jsonArray2.getString("GeplandeReisTijd"));
             } catch (JSONException e) {throw new RuntimeException(e);}
             }
+        }
+        openAdapter();
+    }
+
+    public void openAdapter(){
+        if (vertrek != null) {
+            TijdListAdapter adapter = new TijdListAdapter(this, vertrek, aankomst, reistijd);
+            ListView list = findViewById(R.id.tijden);
+            list.setAdapter(adapter);
+
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+                    // TODO Auto-generated method stub
+                    String Slecteditem = vertrek[+position];
+                    Toast.makeText(getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
+
+                }
+            });
         }
     }
 }

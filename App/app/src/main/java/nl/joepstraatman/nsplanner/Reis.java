@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,6 +20,7 @@ public class Reis extends AppCompatActivity implements View.OnClickListener{
     EditText station1;
     EditText station2;
     EditText naam;
+    String[] countryNameList = {"India", "China", "Australia", "New Zealand", "England", "Pakistan"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +31,7 @@ public class Reis extends AppCompatActivity implements View.OnClickListener{
         Button verwijder = findViewById(R.id.verwijder);
         zoek.setOnClickListener(this);
         verwijder.setOnClickListener(this);
+        setAutoAdapter();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -73,5 +77,13 @@ public class Reis extends AppCompatActivity implements View.OnClickListener{
         station2 = findViewById(R.id.station2);
         naam = findViewById(R.id.naam);
     }
-
+    public void setAutoAdapter(){
+        AutoCompleteTextView auto1 = findViewById(R.id.station1);
+        AutoCompleteTextView auto2 = findViewById(R.id.station2);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, countryNameList);
+        //ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, countryNameList);
+        auto1.setAdapter(adapter);
+        auto1.setThreshold(1);//start searching from 1 character
+        auto1.setAdapter(adapter);
+    }
 }

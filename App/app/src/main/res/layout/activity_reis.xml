@@ -24,12 +24,11 @@
         android:layout_margin="10dp">
 
         <TextView
-            android:layout_marginTop="25dp"
-            android:id="@+id/titlenaam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="Waar ga je heen?"
+            android:layout_marginTop="25dp"
+            android:text="Hoe noem je de reis?"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -37,10 +36,11 @@
             android:id="@+id/naam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
             android:ems="10"
             android:hint="Bijv. Amsterdam"
             android:inputType="textPersonName"
-            android:layout_marginBottom="15dp"/>
+            android:text="Testnaam" />
 
         <TextView
             android:id="@+id/van"
@@ -51,13 +51,14 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/station1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="Utrecht" />
 
         <TextView
             android:id="@+id/naar"
@@ -68,13 +69,14 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/station2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="Amsterdam" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
