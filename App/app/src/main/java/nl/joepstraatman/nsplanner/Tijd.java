@@ -1,7 +1,6 @@
 package nl.joepstraatman.nsplanner;
 
 import android.content.Intent;
-import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -14,13 +13,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import org.json.XML;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,8 +30,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static android.provider.Telephony.Carriers.PASSWORD;
 
 public class Tijd extends AppCompatActivity {
     private FirebaseAuth authTest;
@@ -98,19 +94,15 @@ public class Tijd extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 System.out.println(error);}
         })
-        {
-          @Override
-          public Map<String, String> getHeaders() throws AuthFailureError {
-              HashMap<String, String> params = new HashMap<String, String>();
-              params.put("Content-Type", "application/json");
-              String creds = String.format("%s:%s","straatmanjoep@gmail.com","bnjf-LP20gR1WNnYeZ2RYyDvYItt-PtN2Go1ulSipoWfrY42SIuhHA");
-              String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.NO_WRAP);
-              params.put("Authorization", auth);
-              return params;
-          }
+        {@Override
+        public Map<String, String> getHeaders() throws AuthFailureError {
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("Content-Type", "application/json");
+            String creds = String.format("%s:%s","straatmanjoep@gmail.com","bnjf-LP20gR1WNnYeZ2RYyDvYItt-PtN2Go1ulSipoWfrY42SIuhHA");
+            String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.NO_WRAP);
+            params.put("Authorization", auth);
+            return params;}
         };
-
-
         queue.add(stringRequest);// Add the request to the RequestQueue.
         listClick();
     }
@@ -132,25 +124,40 @@ public class Tijd extends AppCompatActivity {
         listdata = new ArrayList<>();  // load data from file
         Toast.makeText(Tijd.this, response,
                 Toast.LENGTH_LONG).show();
-        /*try {
-            JSONObject jsonObj = new JSONObject(response.toString());
-            ja_data = jsonObj.getJSONArray("results"); // Get objects of request
+        String newResponse = printResponse(response);
+        try {
+            JSONObject newjsonObj = new JSONObject(newResponse);
+            String reisString = newjsonObj.getString("ReisMogelijkheden");
+            JSONObject reisObj = new JSONObject(reisString);
+            ja_data = reisObj.getJSONArray("ReisMogelijkheid"); // Get all the travel posibilities in a list
         } catch (JSONException e) {
             throw new RuntimeException(e);
-        }*/getQuestion();
+        }getQuestion();
         ArrayList<String> myArray = listdata;
         ArrayAdapter<String> adapter = new ArrayAdapter<>(Tijd.this, R.layout.list_layout, myArray);
         final ListView list = findViewById(R.id.tijden);
         list.setAdapter(adapter);
     }
+
+    public String printResponse(String response) {// parse the xml response to json
+        JSONObject jsonObj = null;
+        try {
+            jsonObj = XML.toJSONObject(response);
+        } catch (JSONException e) {
+            Log.e("JSON exception", e.getMessage());
+            e.printStackTrace();
+        }
+        return jsonObj.toString();
+    }
+
     public void getQuestion(){//Get the questions from the response.
         JSONArray jArray = ja_data;
-        /*if (jArray != null) {
+        if (jArray != null) {
             for (int i = 0; i < jArray.length(); i++) {try {
                 JSONObject jsonArray2 = new JSONObject(jArray.getString(i));
-                listdata.add(jsonArray2.getString("question").replaceAll("&quot;", "'").replaceAll("&#039;", "'"));
+                listdata.add(jsonArray2.toString());
             } catch (JSONException e) {throw new RuntimeException(e);}
             }
-        }*/
+        }
     }
 }
