@@ -50,6 +50,7 @@ public class Tijd extends Activity {
     private String naarCode;
     private String van;
     private String naar;
+    public String[] statusReis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +178,7 @@ public class Tijd extends Activity {
         vertrekVertraging = new String[ja_data.length()];
         aankomstVertraging = new String[ja_data.length()];
         reistijdVertraging = new String[ja_data.length()];
+        statusReis = new String[ja_data.length()];
     }
 
     public void checkVertraging(){
@@ -188,14 +190,14 @@ public class Tijd extends Activity {
                 aankomstVertraging[i] = (jsonCheck.getString("ActueleAankomstTijd").substring(11,16));
             }if(!jsonCheck.getString("GeplandeReisTijd").equals((jsonCheck.getString("ActueleReisTijd")))){
                 reistijdVertraging[i] = (jsonCheck.getString("ActueleReisTijd"));
-            }
+            }statusReis[i] = jsonCheck.getString("Status");
         } catch (JSONException e) {throw new RuntimeException(e);}
         }
     }
 
     public void openAdapter(){
         if (vertrek != null) {
-            TijdListAdapter adapter = new TijdListAdapter(this, vertrek, aankomst, reistijd, vertrekVertraging, aankomstVertraging, reistijdVertraging);
+            TijdListAdapter adapter = new TijdListAdapter(this, vertrek, aankomst, reistijd, vertrekVertraging, aankomstVertraging, reistijdVertraging,statusReis);
             ListView list = findViewById(R.id.tijden);
             list.setAdapter(adapter);
 

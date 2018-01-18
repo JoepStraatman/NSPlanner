@@ -59,17 +59,17 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="horizontal"
         android:id="@android:id/text1"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
 
         >
     <TextView
         android:id="@+id/reistijd"
-        android:gravity="center"
+        android:gravity="start"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight=".1"
+        android:layout_weight="1"
         android:text="Reistijd: " />
 
         <TextView
@@ -77,8 +77,16 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:layout_weight=".1"
+            android:layout_weight="1"
             android:gravity="center"
             android:textColor="#FF0000" />
+
+        <ImageView
+            android:id="@+id/uitval"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:visibility="invisible"
+            android:src="@mipmap/uitval" />
     </LinearLayout>
 </LinearLayout>
