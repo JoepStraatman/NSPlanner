@@ -24,6 +24,13 @@
             android:text="TextView" />
 
 
+        <TextView
+            android:id="@+id/vertrekVertraging"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FF0000"
+            android:layout_weight="1" />
+
         <ImageView
             android:id="@+id/arrow"
             android:layout_width="25dp"
@@ -39,12 +46,39 @@
             android:layout_weight="1"
             android:gravity="end"
             android:text="TextView" />
+
+        <TextView
+            android:id="@+id/aankomstVertraging"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FF0000"
+            android:gravity="end"
+            android:layout_weight="1" />
     </LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        android:id="@android:id/text1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+
+        >
     <TextView
         android:id="@+id/reistijd"
-        android:layout_gravity="center"
+        android:gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_weight=".1"
         android:text="Reistijd: " />
+
+        <TextView
+            android:id="@+id/reistijdVertraging"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight=".1"
+            android:gravity="center"
+            android:textColor="#FF0000" />
+    </LinearLayout>
 </LinearLayout>

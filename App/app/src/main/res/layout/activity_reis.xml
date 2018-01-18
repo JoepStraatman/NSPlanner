@@ -58,7 +58,7 @@
             android:layout_marginBottom="15dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Utrecht" />
+            android:text="Utrecht Centraal (UT)" />
 
         <TextView
             android:id="@+id/naar"
@@ -76,7 +76,7 @@
             android:layout_marginBottom="30dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Amsterdam" />
+            android:text="Amsterdam Centraal (ASD)" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

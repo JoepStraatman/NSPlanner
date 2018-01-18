@@ -43,6 +43,9 @@ public class Tijd extends Activity {
     public String[] vertrek;
     public String[] aankomst;
     public String[] reistijd;
+    public String[] vertrekVertraging;
+    public String[] aankomstVertraging;
+    public String[] reistijdVertraging;
     private String vanCode;
     private String naarCode;
     private String van;
@@ -154,9 +157,8 @@ public class Tijd extends Activity {
     public void getQuestion(){//Get the questions from the response.
         JSONArray jArray = ja_data;
         if (jArray != null) {
-            vertrek = new String[jArray.length()];
-            aankomst = new String[jArray.length()];
-            reistijd = new String[jArray.length()];
+            setStringArrays();
+            checkVertraging();
             for (int i = 0; i < jArray.length(); i++) {try {
                 JSONObject jsonArray2 = new JSONObject(jArray.getString(i));
                 vertrek[i] = (jsonArray2.getString("GeplandeVertrekTijd").substring(11,16));
@@ -168,9 +170,32 @@ public class Tijd extends Activity {
         openAdapter();
     }
 
+    public void setStringArrays(){
+        vertrek = new String[ja_data.length()];
+        aankomst = new String[ja_data.length()];
+        reistijd = new String[ja_data.length()];
+        vertrekVertraging = new String[ja_data.length()];
+        aankomstVertraging = new String[ja_data.length()];
+        reistijdVertraging = new String[ja_data.length()];
+    }
+
+    public void checkVertraging(){
+        for (int i = 0; i < ja_data.length(); i++) {try {
+            JSONObject jsonCheck = new JSONObject(ja_data.getString(i));
+            if(!jsonCheck.getString("GeplandeVertrekTijd").substring(11,16).equals((jsonCheck.getString("ActueleVertrekTijd").substring(11,16)))){
+                vertrekVertraging[i] = (jsonCheck.getString("ActueleVertrekTijd").substring(11,16));
+            }if(!jsonCheck.getString("GeplandeAankomstTijd").substring(11,16).equals((jsonCheck.getString("ActueleAankomstTijd").substring(11,16)))){
+                aankomstVertraging[i] = (jsonCheck.getString("ActueleAankomstTijd").substring(11,16));
+            }if(!jsonCheck.getString("GeplandeReisTijd").equals((jsonCheck.getString("ActueleReisTijd")))){
+                reistijdVertraging[i] = (jsonCheck.getString("ActueleReisTijd"));
+            }
+        } catch (JSONException e) {throw new RuntimeException(e);}
+        }
+    }
+
     public void openAdapter(){
         if (vertrek != null) {
-            TijdListAdapter adapter = new TijdListAdapter(this, vertrek, aankomst, reistijd);
+            TijdListAdapter adapter = new TijdListAdapter(this, vertrek, aankomst, reistijd, vertrekVertraging, aankomstVertraging, reistijdVertraging);
             ListView list = findViewById(R.id.tijden);
             list.setAdapter(adapter);
 
