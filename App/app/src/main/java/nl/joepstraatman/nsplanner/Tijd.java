@@ -34,16 +34,19 @@ import java.util.Map;
 
 public class Tijd extends Activity {
 
+    private String naam;
     private FirebaseAuth authTest;
     TextView station1;
     TextView station2;
-    //test url:
-    private String url = "http://webservices.ns.nl/ns-api-treinplanner?fromStation=Utrecht+Centraal&toStation=Amsterdam+centraal";
+    private String url;
     public JSONArray ja_data = null;
     public String[] vertrek;
     public String[] aankomst;
     public String[] reistijd;
-
+    private String vanCode;
+    private String naarCode;
+    private String van;
+    private String naar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class Tijd extends Activity {
         setContentView(R.layout.activity_tijd);
         authTest = FirebaseAuth.getInstance();
         laadDataIn();
+        createUrl();
         openCategory();
     }
 
@@ -85,14 +89,21 @@ public class Tijd extends Activity {
     public void laadDataIn(){
         Bundle extras = getIntent().getExtras();
         if (extras.getString("van") != null){
-        String naam = extras.getString("name");}
-        String van = extras.getString("van");
-        String naar = extras.getString("naar");
+        naam = extras.getString("name");}
+        van = extras.getString("van");
+        naar = extras.getString("naar");
         station1 = findViewById(R.id.van);
         station2 = findViewById(R.id.naar);
         station1.setText(van.toString());
         station2.setText(naar.toString());
     }
+
+    public void createUrl(){
+        vanCode = van.substring(van.indexOf("(") + 1, van.indexOf(")"));
+        naarCode = naar.substring(naar.indexOf("(") + 1, naar.indexOf(")"));
+        url = "http://webservices.ns.nl/ns-api-treinplanner?fromStation="+vanCode+"&toStation="+naarCode;
+    }
+
     //requestque:
     public void openCategory() {//Create a new volley request to the api.
         RequestQueue queue = Volley.newRequestQueue(this);
