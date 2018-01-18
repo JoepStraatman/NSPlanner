@@ -51,6 +51,7 @@ public class Tijd extends Activity {
     private String van;
     private String naar;
     public String[] statusReis;
+    public String[] arrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +133,7 @@ public class Tijd extends Activity {
         queue.add(stringRequest);// Add the request to the RequestQueue.
 
     }
+
     public void jsonparser(String response){ //Set the questions to the listview adapter  // load data from file
         String newResponse = printResponse(response);
         try {
@@ -162,13 +164,13 @@ public class Tijd extends Activity {
             checkVertraging();
             for (int i = 0; i < jArray.length(); i++) {try {
                 JSONObject jsonArray2 = new JSONObject(jArray.getString(i));
+                arrayList[i] = jsonArray2.toString();
                 vertrek[i] = (jsonArray2.getString("GeplandeVertrekTijd").substring(11,16));
                 aankomst[i] = (jsonArray2.getString("GeplandeAankomstTijd").substring(11,16));
                 reistijd[i] = (jsonArray2.getString("GeplandeReisTijd"));
             } catch (JSONException e) {throw new RuntimeException(e);}
             }
-        }
-        openAdapter();
+        }openAdapter();
     }
 
     public void setStringArrays(){
@@ -179,6 +181,7 @@ public class Tijd extends Activity {
         aankomstVertraging = new String[ja_data.length()];
         reistijdVertraging = new String[ja_data.length()];
         statusReis = new String[ja_data.length()];
+        arrayList = new String[ja_data.length()];
     }
 
     public void checkVertraging(){
@@ -200,17 +203,21 @@ public class Tijd extends Activity {
             TijdListAdapter adapter = new TijdListAdapter(this, vertrek, aankomst, reistijd, vertrekVertraging, aankomstVertraging, reistijdVertraging,statusReis);
             ListView list = findViewById(R.id.tijden);
             list.setAdapter(adapter);
-
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-                    // TODO Auto-generated method stub
-                    String Slecteditem = vertrek[+position];
-                    Toast.makeText(getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
-
+                    goToRoute(position);
                 }
             });
         }
+    }
+
+    public void goToRoute(int pos){
+        Intent i = new Intent(this, Route.class);
+        i.putExtra("name", naam);
+        i.putExtra("data", arrayList[pos]);
+        startActivity(i);
+        finish();
     }
 }

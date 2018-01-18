@@ -8,23 +8,34 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Route extends AppCompatActivity{
+
     private FirebaseAuth authTest;
+    String naam;
+    JSONObject data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
         authTest = FirebaseAuth.getInstance();
+        laadDataIn();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.mybutton) {
@@ -32,6 +43,7 @@ public class Route extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
+
     public void logout(){ //Go to the Main class. Called after login is complete.
         authTest.signOut();
         Log.d("Signout", "onAuthStateChanged:signed_out2");
@@ -40,4 +52,16 @@ public class Route extends AppCompatActivity{
         finish();
     }
 
+    public void laadDataIn(){
+        Bundle extras = getIntent().getExtras();
+        naam = extras.getString("name");
+        try {
+            data = new JSONObject(extras.getString("data"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        TextView title = findViewById(R.id.titelnaam);
+        title.setText(naam)
+        ;
+    }
 }
