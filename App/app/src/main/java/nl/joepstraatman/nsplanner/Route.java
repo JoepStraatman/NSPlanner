@@ -20,6 +20,8 @@ public class Route extends AppCompatActivity{
 
     private FirebaseAuth authTest;
     String naam;
+    String van;
+    String naar;
     JSONObject data;
 
     @Override
@@ -55,13 +57,20 @@ public class Route extends AppCompatActivity{
     public void laadDataIn(){
         Bundle extras = getIntent().getExtras();
         naam = extras.getString("name");
+        van = extras.getString("van");
+        naar = extras.getString("naar");
         try {
             data = new JSONObject(extras.getString("data"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        TextView title = findViewById(R.id.titelnaam);
-        title.setText(naam)
-        ;
+        setTextViews();
+    }
+
+    public void setTextViews(){
+        TextView vanV = findViewById(R.id.van);
+        TextView naarV = findViewById(R.id.naar);
+        vanV.setText(van);
+        naarV.setText(naar);
     }
 }

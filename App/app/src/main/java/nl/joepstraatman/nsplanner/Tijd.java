@@ -216,6 +216,8 @@ public class Tijd extends Activity {
     public void goToRoute(int pos){
         Intent i = new Intent(this, Route.class);
         i.putExtra("name", naam);
+        i.putExtra("van", van);
+        i.putExtra("naar", naar);
         i.putExtra("data", arrayList[pos]);
         startActivity(i);
         finish();

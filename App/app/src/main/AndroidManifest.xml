@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="nl.joepstraatman.nsplanner">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,7 +24,8 @@
         <activity android:name=".Route" />
         <activity android:name=".Overstap" />
         <activity android:name=".Looproute" />
-        <activity android:name=".Favorieten"></activity>
+        <activity android:name=".Favorieten" />
+        <activity android:name=".RoutePlan"></activity>
     </application>
 
 </manifest>

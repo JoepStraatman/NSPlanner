@@ -1,10 +1,7 @@
 package nl.joepstraatman.nsplanner;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Paint;
-import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +32,7 @@ public class TijdListAdapter extends ArrayAdapter<String> {
     private ImageView statusView;
 
     public TijdListAdapter(Activity context, String[] Begin, String[] Eind, String[] ReisT, String[] VertrekV, String[] AankomstV, String[] ReisV, String[] StatusR) {
-        super(context, R.layout.list_layout,Begin);
+        super(context, R.layout.list_layoutTijd,Begin);
         this.context=context;
         this.begin=Begin;
         this.eind=Eind;
@@ -47,7 +44,7 @@ public class TijdListAdapter extends ArrayAdapter<String> {
     }
     public View getView(int position,View view,ViewGroup parent) {
         LayoutInflater inflater=context.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.list_layout, null,true);
+        View rowView=inflater.inflate(R.layout.list_layoutTijd, null,true);
         ImageView arrow = rowView.findViewById(R.id.arrow);
         arrow.setImageResource(R.drawable.arrow);
         findViews(rowView);

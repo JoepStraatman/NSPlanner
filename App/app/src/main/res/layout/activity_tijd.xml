@@ -32,7 +32,7 @@
         android:layout_height="15dp"
         android:gravity="center_horizontal"
         android:visibility="visible"
-        app:srcCompat="@drawable/arrow_down" />
+        android:src="@drawable/arrow_down" />
 
     <TextView
         android:id="@+id/naar"

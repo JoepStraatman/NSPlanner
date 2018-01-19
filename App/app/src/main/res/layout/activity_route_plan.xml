@@ -5,39 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
-    tools:context="nl.joepstraatman.nsplanner.Route"
+    tools:context="nl.joepstraatman.nsplanner.RoutePlan"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/van"
-        android:textStyle="bold"
-        android:textSize="20sp"
+        android:id="@+id/favoriet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="Van" />
+        android:gravity="end"
+        android:text="Favoriet" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:gravity="center_horizontal"
-        android:visibility="visible"
-        app:srcCompat="@drawable/arrow_down" />
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end" />
 
     <TextView
-        android:id="@+id/naar"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:id="@+id/titelnaam"
+        android:textSize="35sp"
+        android:layout_marginLeft="30dp"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="Naar" />
+        android:text="test" />
 
     <ListView
-        android:id="@+id/routeList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content" >
+    </ListView>
 
     <Button
         android:id="@+id/voegToe"
