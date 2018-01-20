@@ -32,7 +32,7 @@ public class TijdListAdapter extends ArrayAdapter<String> {
     private ImageView statusView;
 
     public TijdListAdapter(Activity context, String[] Begin, String[] Eind, String[] ReisT, String[] VertrekV, String[] AankomstV, String[] ReisV, String[] StatusR) {
-        super(context, R.layout.list_layoutTijd,Begin);
+        super(context, R.layout.list_layout_tijd,Begin);
         this.context=context;
         this.begin=Begin;
         this.eind=Eind;
@@ -44,7 +44,7 @@ public class TijdListAdapter extends ArrayAdapter<String> {
     }
     public View getView(int position,View view,ViewGroup parent) {
         LayoutInflater inflater=context.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.list_layoutTijd, null,true);
+        View rowView=inflater.inflate(R.layout.list_layout_tijd, null,true);
         ImageView arrow = rowView.findViewById(R.id.arrow);
         arrow.setImageResource(R.drawable.arrow);
         findViews(rowView);

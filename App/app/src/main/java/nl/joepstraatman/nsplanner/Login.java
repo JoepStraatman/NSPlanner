@@ -30,7 +30,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getWindow().getDecorView().setBackgroundColor(Color.parseColor("#D6896A"));
+        //getWindow().getDecorView().setBackgroundColor(Color.parseColor("#D6896A"));
         mAuth = FirebaseAuth.getInstance();
         final Button login = findViewById(R.id.login);
         final Button create = findViewById(R.id.create);

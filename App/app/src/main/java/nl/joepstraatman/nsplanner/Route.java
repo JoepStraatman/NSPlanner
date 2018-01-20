@@ -7,12 +7,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,6 +33,7 @@ public class Route extends AppCompatActivity{
         setContentView(R.layout.activity_route);
         authTest = FirebaseAuth.getInstance();
         laadDataIn();
+        openAdapter();
     }
 
     @Override
@@ -70,7 +74,27 @@ public class Route extends AppCompatActivity{
     public void setTextViews(){
         TextView vanV = findViewById(R.id.van);
         TextView naarV = findViewById(R.id.naar);
+        TextView reistijd = findViewById(R.id.reisTijd);
         vanV.setText(van);
         naarV.setText(naar);
+        try {
+            reistijd.setText("Reistijd: " + data.getString("ActueleReisTijd"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
+    public void openAdapter(){
+        JSONArray overstappen = null;
+        try {
+            JSONObject reisdeel = new JSONObject(data.getString("ReisDeel"));
+            overstappen = (reisdeel.getJSONArray("ReisStop"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String[] overstapLijst = new String[overstappen.length()];
+        RouteListAdapter adapter = new RouteListAdapter(this, overstapLijst, data);
+        ListView list = findViewById(R.id.routeList);
+        list.setAdapter(adapter);
+        }
+
 }
