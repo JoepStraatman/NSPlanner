@@ -87,6 +87,7 @@ public class Route extends AppCompatActivity{
         JSONArray overstappen = null;
         try {
             JSONObject reisdeel = new JSONObject(data.getString("ReisDeel"));
+            Log.d("reis12", reisdeel.toString());
             overstappen = (reisdeel.getJSONArray("ReisStop"));
         } catch (JSONException e) {
             e.printStackTrace();
