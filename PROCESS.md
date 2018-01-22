@@ -1,3 +1,4 @@
+## week 2
 # day 1
 Hele dag bezig geweest met het proberen om in te loggen op de NS API. Echter nog niet gelukt, valt ook vrij weinig te vinden over op internet.
 Morgen maar aan de assistent vragen of zij me kunnen helpen.
@@ -13,3 +14,9 @@ Nu vertragingen toegevoegd en een melding bij een tijd als die route niet meer m
 
 # day 5
 Bezig met het route scherm, nu een adapter toegevoegd waar de stops van de trein in moeten komen staan.
+
+# weekend
+Het route scherm werkend gekregen, tijden kloppen nu en tussenstops zitten erin. Nog een bug voor vertragingen en voor overstappen.
+
+##  week 3
+# day 6
