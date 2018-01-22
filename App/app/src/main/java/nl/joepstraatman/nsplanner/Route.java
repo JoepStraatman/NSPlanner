@@ -1,6 +1,7 @@
 package nl.joepstraatman.nsplanner;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -75,13 +76,16 @@ public class Route extends AppCompatActivity{
         TextView vanV = findViewById(R.id.van);
         TextView naarV = findViewById(R.id.naar);
         TextView reistijd = findViewById(R.id.reisTijd);
+        TextView reistijdVertraging = findViewById(R.id.reisVertraging);
         vanV.setText(van);
         naarV.setText(naar);
         try {
-            reistijd.setText("Reistijd: " + data.getString("ActueleReisTijd"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            reistijd.setText("Reistijd: " + data.getString("GeplandeReisTijd"));
+            if (!data.getString("GeplandeReisTijd").equals(data.getString("ActueleReisTijd"))){
+                reistijdVertraging.setText(data.getString("ActueleReisTijd"));
+                reistijd.setPaintFlags(reistijd.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            }} catch (JSONException e) {
+            e.printStackTrace();}
     }
     public void openAdapter(){
         JSONArray overstappen = null;

@@ -29,6 +29,8 @@ public class RouteListAdapter extends ArrayAdapter<String> {
     String aankomstVertraging;
     TextView vertrekTijd;
     TextView vertrekTijdVertraging;
+    TextView station;
+    TextView vertrekSpoor;
     JSONArray overstappen;
     String[] stopTijd;
     String[] Station;
@@ -42,20 +44,19 @@ public class RouteListAdapter extends ArrayAdapter<String> {
         getData();
     }
 
-    public void getData(){try {
-            vertrek = data.getString("GeplandeVertrekTijd").substring(11,16);
-            vertrekVertraging = data.getString("ActueleVertrekTijd").substring(11,16);
+    public void getData(){
+        try {vertrek = data.getString("GeplandeVertrekTijd").substring(11,16);
+            getVertragingen();
             JSONObject reisdeel = new JSONObject(data.getString("ReisDeel"));
             overstappen = (reisdeel.getJSONArray("ReisStop"));
-        } catch (JSONException e) {
-            e.printStackTrace();}
-        setArrays();
+        } catch (JSONException e) {e.printStackTrace();} setArrays();
         for (int i = 0; i < overstappen.length(); i++){
             try {
                 Log.d("overstap",overstappen.getString(i));
                 stopTijd[i] = overstappen.getJSONObject(i).getString("Tijd");
                 Station[i] = overstappen.getJSONObject(i).getString("Naam");
-                Spoor[i] = overstappen.getJSONObject(i).getJSONObject("Spoor").getString("content");
+                if (i == 0 || i == overstappen.length()-1){
+                Spoor[i] = overstappen.getJSONObject(i).getJSONObject("Spoor").getString("content");}
             } catch (JSONException e) {
                 e.printStackTrace();}}}
 
@@ -64,28 +65,49 @@ public class RouteListAdapter extends ArrayAdapter<String> {
         View rowView=inflater.inflate(R.layout.list_layout_route, null,true);
         vertrekTijd = rowView.findViewById(R.id.vertrekTijd);
         vertrekTijdVertraging = rowView.findViewById(R.id.VertrekVertraging);
-        checkVertraging();
-        TextView station = rowView.findViewById(R.id.vertrekStation);
-        TextView vertrekSpoor = rowView.findViewById(R.id.vertrekSpoor);
-        if (position == 0){
-            vertrekTijd.setText(vertrek);
-        }else if (position == overstappen.length()-1){
-            vertrekTijd.setText(stopTijd[position].substring(11,16));
-        }
-        else{
-            vertrekTijd.setText(stopTijd[position].substring(11,16));
-            vertrekTijd.setTextSize(TypedValue.COMPLEX_UNIT_SP,13);
-            station.setTextSize(TypedValue.COMPLEX_UNIT_SP,13);
-            vertrekSpoor.setTextSize(TypedValue.COMPLEX_UNIT_SP,13);
-        }station.setText(Station[position]);
+        station = rowView.findViewById(R.id.vertrekStation);
+        vertrekSpoor = rowView.findViewById(R.id.vertrekSpoor);
+        SetTextViews(position);
         if (Spoor[position] != null){
         vertrekSpoor.setText("Spoor: " + Spoor[position]);}else{vertrekSpoor.setText("");}
         return rowView;
     }
 
-    public void checkVertraging() {
+    public void getVertragingen(){
+        try {
+            vertrekVertraging = data.getString("ActueleVertrekTijd").substring(11,16);
+            aankomstVertraging = data.getString("ActueleAankomstTijd").substring(11,16);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void SetTextViews(int position){
+        if (position == 0){
+            vertrekTijd.setText(vertrek);
+            checkVertragingVertrek();
+        }else if (position == overstappen.length()-1){
+            aankomst = stopTijd[position].substring(11,16);
+            vertrekTijd.setText(aankomst);
+            checkVertragingAankomst();
+        } else{
+            vertrekTijd.setText(stopTijd[position].substring(11,16));
+            vertrekTijd.setTextSize(TypedValue.COMPLEX_UNIT_SP,13);
+            station.setTextSize(TypedValue.COMPLEX_UNIT_SP,13);
+            vertrekSpoor.setTextSize(TypedValue.COMPLEX_UNIT_SP,13);
+        }station.setText(Station[position]);
+    }
+
+    public void checkVertragingVertrek() {
         if (!vertrek.equals(vertrekVertraging)) {
             vertrekTijdVertraging.setText(vertrekVertraging);
+            vertrekTijd.setPaintFlags(vertrekTijd.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+    }
+
+    public void checkVertragingAankomst(){
+        if (!aankomst.equals(aankomstVertraging)) {
+            vertrekTijdVertraging.setText(aankomstVertraging);
             vertrekTijd.setPaintFlags(vertrekTijd.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }

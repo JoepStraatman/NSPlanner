@@ -40,6 +40,7 @@ public class Tijd extends Activity {
     TextView station2;
     private String url;
     public JSONArray ja_data = null;
+    public JSONArray filterOverstap;
     public String[] vertrek;
     public String[] aankomst;
     public String[] reistijd;
@@ -141,9 +142,22 @@ public class Tijd extends Activity {
             String reisString = newjsonObj.getString("ReisMogelijkheden");
             JSONObject reisObj = new JSONObject(reisString);
             ja_data = reisObj.getJSONArray("ReisMogelijkheid"); // Get all the travel posibilities in a list
+            filterOverstappen();
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }getQuestion();
+    }
+
+    public void filterOverstappen(){
+        filterOverstap = new JSONArray();
+        for (int i = 0; i <ja_data.length(); i++){try{
+            JSONObject advies = new JSONObject(ja_data.getString(i));
+            if (advies.getString("AantalOverstappen").equals("0")){
+                filterOverstap.put(ja_data.get(i));
+            }
+        }catch (JSONException e) {throw new RuntimeException(e);}
+        }
+        Log.d("filteroverstap", filterOverstap.toString());
     }
 
     public String printResponse(String response) {// parse the xml response to json
@@ -158,7 +172,7 @@ public class Tijd extends Activity {
     }
 
     public void getQuestion(){//Get the questions from the response.
-        JSONArray jArray = ja_data;
+        JSONArray jArray = filterOverstap;
         if (jArray != null) {
             setStringArrays();
             checkVertraging();
@@ -174,19 +188,19 @@ public class Tijd extends Activity {
     }
 
     public void setStringArrays(){
-        vertrek = new String[ja_data.length()];
-        aankomst = new String[ja_data.length()];
-        reistijd = new String[ja_data.length()];
-        vertrekVertraging = new String[ja_data.length()];
-        aankomstVertraging = new String[ja_data.length()];
-        reistijdVertraging = new String[ja_data.length()];
-        statusReis = new String[ja_data.length()];
-        arrayList = new String[ja_data.length()];
+        vertrek = new String[filterOverstap.length()];
+        aankomst = new String[filterOverstap.length()];
+        reistijd = new String[filterOverstap.length()];
+        vertrekVertraging = new String[filterOverstap.length()];
+        aankomstVertraging = new String[filterOverstap.length()];
+        reistijdVertraging = new String[filterOverstap.length()];
+        statusReis = new String[filterOverstap.length()];
+        arrayList = new String[filterOverstap.length()];
     }
 
     public void checkVertraging(){
-        for (int i = 0; i < ja_data.length(); i++) {try {
-            JSONObject jsonCheck = new JSONObject(ja_data.getString(i));
+        for (int i = 0; i < filterOverstap.length(); i++) {try {
+            JSONObject jsonCheck = new JSONObject(filterOverstap.getString(i));
             if(!jsonCheck.getString("GeplandeVertrekTijd").substring(11,16).equals((jsonCheck.getString("ActueleVertrekTijd").substring(11,16)))){
                 vertrekVertraging[i] = (jsonCheck.getString("ActueleVertrekTijd").substring(11,16));
             }if(!jsonCheck.getString("GeplandeAankomstTijd").substring(11,16).equals((jsonCheck.getString("ActueleAankomstTijd").substring(11,16)))){
@@ -220,6 +234,6 @@ public class Tijd extends Activity {
         i.putExtra("naar", naar);
         i.putExtra("data", arrayList[pos]);
         startActivity(i);
-        finish();
+        //finish();
     }
 }
