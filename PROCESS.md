@@ -20,3 +20,4 @@ Het route scherm werkend gekregen, tijden kloppen nu en tussenstops zitten erin.
 
 #  week 3
 ## day 6
+Het route scherm afgemaakt, overstappen eruit gefilterd en de vertragingen in erin gezet.
