@@ -5,6 +5,8 @@
     <color name="colorAccent">#901E10</color>
     <color name="titleColor">#601E13</color>
     <color name="darker">#AD6F56</color>
+    <color name="licht">#3973ac</color>
+    <color name="zwart">#000000</color>
 
     <color name="black_overlay">#66000000</color>
 </resources>

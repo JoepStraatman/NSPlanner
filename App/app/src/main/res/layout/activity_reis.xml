@@ -1,125 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="nl.joepstraatman.nsplanner.Reis"
-    android:orientation="vertical"
-    android:layout_margin="5dp">
+    tools:context="nl.joepstraatman.nsplanner.Reis">
 
-    <TextView
-        android:id="@+id/Title"
+    <ImageView
+        android:id="@+id/imageView3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:gravity="center_horizontal"
-        android:text="Plan je reis:"
-        android:textSize="40sp" />
+        android:layout_height="match_parent"
+        android:scaleType = "centerCrop"
+        app:srcCompat="@mipmap/home_background" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="10dp">
+        android:layout_gravity="center"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="75dp"
+        android:alpha=".9"
+        android:background="#ffffff"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/Title"
+            android:textColor="#000000"
+            android:fontFamily="monospace"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="25dp"
-            android:text="Hoe noem je de reis?"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_margin="20dp"
+            android:gravity="center_horizontal"
+            android:text="Waar ga je heen?"
+            android:textSize="30sp" />
 
-        <EditText
-            android:id="@+id/naam"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:ems="10"
-            android:hint="Bijv. Amsterdam"
-            android:inputType="textPersonName"
-            android:text="Testnaam" />
+            android:layout_margin="10dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/van"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Van"
-            android:layout_marginBottom="5dp"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="25dp"
+                android:text="Hoe noem je de reis?"
+                android:fontFamily="monospace"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-        <AutoCompleteTextView
-            android:id="@+id/station1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Utrecht Centraal (UT)" />
+            <EditText
+                android:id="@+id/naam"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:ems="10"
+                android:fontFamily="monospace"
+                android:hint="Bijv. Amsterdam"
+                android:inputType="textPersonName"
+                android:text="Testnaam" />
 
-        <TextView
-            android:id="@+id/naar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Naar"
-            android:layout_marginBottom="5dp"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/van"
+                android:textColor="#000000"
+                android:fontFamily="monospace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Van"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-        <AutoCompleteTextView
-            android:id="@+id/station2"
+            <AutoCompleteTextView
+                android:id="@+id/station1"
+                android:textColor="#000000"
+                android:fontFamily="monospace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Utrecht Centraal (UT)" />
+
+            <TextView
+                android:id="@+id/naar"
+                android:textColor="#000000"
+                android:fontFamily="monospace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Naar"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <AutoCompleteTextView
+                android:id="@+id/station2"
+                android:fontFamily="monospace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Amsterdam Centraal (ASD)" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tijd" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="datum" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Amsterdam Centraal (ASD)" />
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/zoek"
+                android:alpha=".8"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:fontFamily="monospace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#99c2ff"
+                android:layout_weight=".9"
+                android:text="Zoek"
+                android:textSize="15sp"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/verwijder"
+                android:alpha=".8"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:fontFamily="monospace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#99c2ff"
+                android:layout_weight=".1"
+                android:text="X"
+                android:textSize="15sp"
+                android:textAllCaps="false" />
+
+        </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Tijd" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="datum"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/zoek"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight=".75"
-            android:text="Zoek"
-            android:textAllCaps="false" />
-
-        <Button
-            android:id="@+id/verwijder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight=".25"
-            android:text="X"
-            android:textAllCaps="false" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</FrameLayout>
