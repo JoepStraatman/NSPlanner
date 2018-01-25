@@ -93,9 +93,9 @@ public class RouteListAdapter extends ArrayAdapter<String> {
             checkVertragingAankomst();
         } else{
             vertrekTijd.setText(stopTijd[position].substring(11,16));
-            vertrekTijd.setTextSize(TypedValue.COMPLEX_UNIT_SP,13);
-            station.setTextSize(TypedValue.COMPLEX_UNIT_SP,13);
-            vertrekSpoor.setTextSize(TypedValue.COMPLEX_UNIT_SP,13);
+            vertrekTijd.setTextSize(TypedValue.COMPLEX_UNIT_SP,11);
+            station.setTextSize(TypedValue.COMPLEX_UNIT_SP,11);
+            vertrekSpoor.setTextSize(TypedValue.COMPLEX_UNIT_SP,11);
         }station.setText(Station[position]);
     }
 

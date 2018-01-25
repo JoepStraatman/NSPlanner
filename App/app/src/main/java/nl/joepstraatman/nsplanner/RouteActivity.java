@@ -81,6 +81,7 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
                 Intent i = new Intent(this, RoutePlanActivity.class);
                 i.putExtra("name", naam);
                 startActivity(i);
+                finish();
                 break;
         }
     }
@@ -146,10 +147,10 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
 
     public void send(String uid){
         //mDatabase.child("RouteActivity").setValue(score.getText().toString());
-        mDatabase.child("Onlangs").child(uid).child(naam).child("Ritnummer").setValue(ritNummer);
-        mDatabase.child("Onlangs").child(uid).child(naam).child("TijdDatum").setValue(setTijdDatum(tijd));
-        mDatabase.child("Onlangs").child(uid).child(naam).child("van").setValue(getCode(van));
-        mDatabase.child("Onlangs").child(uid).child(naam).child("naar").setValue(getCode(naar));
+        mDatabase.child("Onlangs").child(uid).child(naam).child(getCodeVanNaar()).child("Ritnummer").setValue(ritNummer);
+        mDatabase.child("Onlangs").child(uid).child(naam).child(getCodeVanNaar()).child("TijdDatum").setValue(setTijdDatum(tijd));
+        mDatabase.child("Onlangs").child(uid).child(naam).child(getCodeVanNaar()).child("Van").setValue(getCode(van));
+        mDatabase.child("Onlangs").child(uid).child(naam).child(getCodeVanNaar()).child("Naar").setValue(getCode(naar));
     }
 
     public String getCode(String geheel){
@@ -158,5 +159,9 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
 
     public String setTijdDatum(String tijddatum){
         return tijddatum.substring(0,10) + "T" + tijddatum.substring(11,16);
+    }
+
+    public String getCodeVanNaar(){
+        return getCode(van) + getCode(naar);
     }
 }
