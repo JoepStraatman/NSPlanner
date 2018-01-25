@@ -41,6 +41,30 @@
             android:layout_weight="1" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/reistijd"
+        android:textColor="#000000"
+        android:fontFamily="monospace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="reistijd: " />
+
+    <TextView
+        android:id="@+id/reistijdvertraging"
+        android:layout_width="wrap_content"
+        android:textColor="#FF0000"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="" />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/routeplanlist"
         android:layout_width="match_parent"

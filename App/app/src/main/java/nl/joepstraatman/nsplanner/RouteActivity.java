@@ -129,7 +129,7 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         RouteListAdapter adapter = new RouteListAdapter(this, overstapLijst, data);
         ListView list = findViewById(R.id.routeList);
         list.setAdapter(adapter);
-        }
+    }
 
     public void dataToFirebase(){//Get the current karmapoints of the user.
         mDatabase.addValueEventListener(new ValueEventListener() {

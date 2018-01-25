@@ -1,7 +1,9 @@
 package nl.joepstraatman.nsplanner;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -23,20 +25,20 @@ public class RouteListAdapter extends ArrayAdapter<String> {
     private final Activity context;
     private final JSONObject data;
     private final String[] stops;
-    String vertrek;
-    String vertrekVertraging;
-    String aankomst;
-    String aankomstVertraging;
-    TextView vertrekTijd;
-    TextView vertrekTijdVertraging;
-    TextView station;
-    TextView vertrekSpoor;
-    JSONArray overstappen;
-    String[] stopTijd;
-    String[] Station;
-    String[] Spoor;
+    private String vertrek;
+    private String vertrekVertraging;
+    private String aankomst;
+    private String aankomstVertraging;
+    private TextView vertrekTijd;
+    private TextView vertrekTijdVertraging;
+    private TextView station;
+    private TextView vertrekSpoor;
+    private JSONArray overstappen;
+    private String[] stopTijd;
+    private String[] Station;
+    private String[] Spoor;
 
-    public RouteListAdapter(Activity Context, String[] Stops, JSONObject Data){
+    RouteListAdapter(Activity Context, String[] Stops, JSONObject Data){
         super(Context, R.layout.list_layout_route, Stops);
         this.context=Context;
         this.stops=Stops;
@@ -44,7 +46,7 @@ public class RouteListAdapter extends ArrayAdapter<String> {
         getData();
     }
 
-    public void getData(){
+    private void getData(){
         try {vertrek = data.getString("GeplandeVertrekTijd").substring(11,16);
             getVertragingen();
             JSONObject reisdeel = new JSONObject(data.getString("ReisDeel"));
@@ -61,9 +63,10 @@ public class RouteListAdapter extends ArrayAdapter<String> {
                 e.printStackTrace();}}
     }
 
-    public View getView(int position,View view,ViewGroup parent) {
+    @NonNull
+    public View getView(int position, View view, @NonNull ViewGroup parent) {
         LayoutInflater inflater=context.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.list_layout_route, null,true);
+        @SuppressLint("ViewHolder") View rowView=inflater.inflate(R.layout.list_layout_route, null,true);
         vertrekTijd = rowView.findViewById(R.id.vertrekTijd);
         vertrekTijdVertraging = rowView.findViewById(R.id.VertrekVertraging);
         station = rowView.findViewById(R.id.vertrekStation);
@@ -74,7 +77,7 @@ public class RouteListAdapter extends ArrayAdapter<String> {
         return rowView;
     }
 
-    public void getVertragingen(){
+    private void getVertragingen(){
         try {
             vertrekVertraging = data.getString("ActueleVertrekTijd").substring(11,16);
             aankomstVertraging = data.getString("ActueleAankomstTijd").substring(11,16);
@@ -83,7 +86,7 @@ public class RouteListAdapter extends ArrayAdapter<String> {
         }
     }
 
-    public void SetTextViews(int position){
+    private void SetTextViews(int position){
         if (position == 0){
             vertrekTijd.setText(vertrek);
             checkVertragingVertrek();
@@ -99,21 +102,21 @@ public class RouteListAdapter extends ArrayAdapter<String> {
         }station.setText(Station[position]);
     }
 
-    public void checkVertragingVertrek() {
+    private void checkVertragingVertrek() {
         if (!vertrek.equals(vertrekVertraging)) {
             vertrekTijdVertraging.setText(vertrekVertraging);
             vertrekTijd.setPaintFlags(vertrekTijd.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }
 
-    public void checkVertragingAankomst(){
+    private void checkVertragingAankomst(){
         if (!aankomst.equals(aankomstVertraging)) {
             vertrekTijdVertraging.setText(aankomstVertraging);
             vertrekTijd.setPaintFlags(vertrekTijd.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }
 
-    public void setArrays(){
+    private void setArrays(){
         stopTijd = new String[overstappen.length()];
         Station = new String[overstappen.length()];
         Spoor = new String[overstappen.length()];

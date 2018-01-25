@@ -251,6 +251,6 @@ public class TijdActivity extends Activity {
         i.putExtra("data", arrayList[pos]);
         i.putExtra("ritnummer", ritNummer[pos]);
         startActivity(i);
-        //finish();
+        finish();
     }
 }

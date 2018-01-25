@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,8 +19,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RoutePlanActivity extends AppCompatActivity {
 
@@ -28,6 +33,8 @@ public class RoutePlanActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authListenerTest;
     private static final String Tag = "Firebase_test";
     private DatabaseReference mDatabase;
+    private List<String> stationlijst;
+    private RoutePlanAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +44,9 @@ public class RoutePlanActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         laadDataIn();
         getRouteFromFirebase();
+        setList();
+        openAdapter();
+        addToList();
     }
 
     @Override
@@ -74,15 +84,47 @@ public class RoutePlanActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 FirebaseUser user = authTest.getCurrentUser();
-                RouteData routedata = dataSnapshot.child("Onlangs/"+user.getUid()+"/"+naam).getValue(RouteData.class);
+                /*RouteData routedata = dataSnapshot.child("Onlangs/"+user.getUid()+"/"+naam).getValue(RouteData.class);
                 if (routedata != null){
                     Log.d("fireroute", routedata.Ritnummer+ " - " + routedata.TijdDatum + " - " + routedata.Naar + " - " + routedata.Van);
-                }}
+                }*/
+                DataSnapshot naamsnapshot = dataSnapshot.child("Onlangs/"+user.getUid()+"/"+naam);
+                Iterable<DataSnapshot> naamChildren = naamsnapshot.getChildren();
+                for (DataSnapshot naam : naamChildren) {
+                    RouteData routedata = naam.getValue(RouteData.class);
+                    Log.d("fireroute", routedata.Ritnummer+ " - " + routedata.TijdDatum + " - " + routedata.Naar + " - " + routedata.Van);
+                    //contacts.add(c);
+                }
+            }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w("oops","Oops something went wrong: ",databaseError.toException());
                 //startActivity(new Intent(getApplicationContext(), Home_screen.class));finish();
             }
         });
+    }
+    public void openAdapter(){
+        adapter = new RoutePlanAdapter(this,stationlijst);
+        ListView list = findViewById(R.id.routeplanlist);
+        list.setAdapter(adapter);
+        adapter.addStationPosition(0);
+        adapter.addStationPosition(3);
+    }
+
+    private void setList(){
+        stationlijst = new ArrayList<String>();
+        stationlijst.add("1");
+        stationlijst.add("2");
+        stationlijst.add("3");
+        stationlijst.add("4");
+    }
+    private void addToList(){
+        adapter.addStationPosition(adapter.getStationMaxPosition()+1);
+        stationlijst.add("5 NIEUW");
+        stationlijst.add("6 NIEUW");
+        stationlijst.add("7 NIEUW");
+        stationlijst.add("8 NIEUW");
+        adapter.addStationPosition(stationlijst.size()-1);
+        adapter.notifyDataSetChanged();
     }
 }
