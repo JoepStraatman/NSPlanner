@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_margin="10dp"
     android:orientation="vertical"
-    tools:context="nl.joepstraatman.nsplanner.Tijd">
+    tools:context="nl.joepstraatman.nsplanner.TijdActivity">
 
     <TextView
         android:id="@+id/titel"

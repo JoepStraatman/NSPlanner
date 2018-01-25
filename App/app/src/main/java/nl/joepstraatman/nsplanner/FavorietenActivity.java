@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Favorieten extends AppCompatActivity {
+public class FavorietenActivity extends AppCompatActivity {
     private FirebaseAuth authTest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +32,13 @@ public class Favorieten extends AppCompatActivity {
     public void logout(){ //Go to the Main class. Called after login is complete.
         authTest.signOut();
         Log.d("Signout", "onAuthStateChanged:signed_out2");
-        Intent intent = new Intent(getApplicationContext(), Login.class);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
     }
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, Home.class));finish();
+        startActivity(new Intent(this, HomeActivity.class));finish();
         super.onBackPressed();
     }
 }

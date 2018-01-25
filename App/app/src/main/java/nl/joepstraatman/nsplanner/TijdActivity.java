@@ -2,7 +2,6 @@ package nl.joepstraatman.nsplanner;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -10,10 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import org.json.XML;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -28,11 +26,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Tijd extends Activity {
+public class TijdActivity extends Activity {
 
     private String naam;
     private FirebaseAuth authTest;
@@ -51,6 +48,8 @@ public class Tijd extends Activity {
     private String naarCode;
     private String van;
     private String naar;
+    public String[] ritNummer;
+    public String tijd;
     public String[] statusReis;
     public String[] arrayList;
 
@@ -81,14 +80,14 @@ public class Tijd extends Activity {
     public void logout(){ //Go to the Main class. Called after login is complete.
         authTest.signOut();
         Log.d("Signout", "onAuthStateChanged:signed_out2");
-        Intent intent = new Intent(getApplicationContext(), Login.class);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
     }
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, Reis.class));finish();
+        startActivity(new Intent(this, ReisActivity.class));finish();
         super.onBackPressed();
     }
 
@@ -102,6 +101,7 @@ public class Tijd extends Activity {
         station2 = findViewById(R.id.naar);
         station1.setText(van.toString());
         station2.setText(naar.toString());
+        tijd = extras.getString("tijd");
     }
 
     public void createUrl(){
@@ -143,19 +143,34 @@ public class Tijd extends Activity {
             JSONObject reisObj = new JSONObject(reisString);
             ja_data = reisObj.getJSONArray("ReisMogelijkheid"); // Get all the travel posibilities in a list
             filterOverstappen();
+            getRitnummer();
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }getQuestion();
     }
 
+    public void getRitnummer(){
+        ritNummer = new String[filterOverstap.length()];
+        for (int i = 0; i < filterOverstap.length(); i++){
+            try {
+            JSONObject advies = new JSONObject(filterOverstap.getString(i));
+            JSONObject reisdeel = new JSONObject(advies.getString("ReisDeel"));
+                ritNummer[i] = reisdeel.getString("RitNummer");
+            }
+         catch (JSONException e) { throw new RuntimeException(e);}
+        }
+    }
+
     public void filterOverstappen(){
+
         filterOverstap = new JSONArray();
-        for (int i = 0; i <ja_data.length(); i++){try{
+
+        for (int i = 0; i < ja_data.length(); i++){ try {
             JSONObject advies = new JSONObject(ja_data.getString(i));
             if (advies.getString("AantalOverstappen").equals("0")){
                 filterOverstap.put(ja_data.get(i));
             }
-        }catch (JSONException e) {throw new RuntimeException(e);}
+        } catch (JSONException e) { throw new RuntimeException(e);}
         }
         Log.d("filteroverstap", filterOverstap.toString());
     }
@@ -228,11 +243,13 @@ public class Tijd extends Activity {
     }
 
     public void goToRoute(int pos){
-        Intent i = new Intent(this, Route.class);
+        Intent i = new Intent(this, RouteActivity.class);
         i.putExtra("name", naam);
         i.putExtra("van", van);
         i.putExtra("naar", naar);
+        i.putExtra("tijd", tijd);
         i.putExtra("data", arrayList[pos]);
+        i.putExtra("ritnummer", ritNummer[pos]);
         startActivity(i);
         //finish();
     }

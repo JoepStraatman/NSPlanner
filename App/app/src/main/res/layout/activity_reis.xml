@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="nl.joepstraatman.nsplanner.Reis">
+    tools:context="nl.joepstraatman.nsplanner.ReisActivity">
 
     <ImageView
         android:id="@+id/imageView3"
@@ -113,12 +113,14 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/tijd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Tijd" />
 
             <Button
+                android:id="@+id/datum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

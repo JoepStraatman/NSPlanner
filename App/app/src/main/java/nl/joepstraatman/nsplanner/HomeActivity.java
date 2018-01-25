@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Home extends AppCompatActivity implements View.OnClickListener{
+public class HomeActivity extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseAuth authTest;
     private String[] lijst;
@@ -48,16 +48,16 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
     public void logout(){ //Go to the Main class. Called after login is complete.
         authTest.signOut();
         Log.d("Signout", "onAuthStateChanged:signed_out2");
-        Intent intent = new Intent(getApplicationContext(), Login.class);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
     }
 
     public void onClick(View v) {
         if (v.getId() == R.id.Favoriet) {
-            startActivity(new Intent(Home.this, Favorieten.class));finish();
+            startActivity(new Intent(HomeActivity.this, FavorietenActivity.class));finish();
         } else if (v.getId() == R.id.Nieuw) {
-            startActivity(new Intent(Home.this, Reis.class));finish();
+            startActivity(new Intent(HomeActivity.this, ReisActivity.class));finish();
         }
     }
 
@@ -76,7 +76,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
         }
 
     public void goToRoute(int pos){
-        //Intent i = new Intent(this, Route.class);
+        //Intent i = new Intent(this, RouteActivity.class);
         //startActivity(i);
         //finish();
         Toast.makeText(this, "Wordt nog aangewerkt" ,Toast.LENGTH_SHORT).show();

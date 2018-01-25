@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Overstap extends AppCompatActivity implements View.OnClickListener{
+public class OverstapActivity extends AppCompatActivity implements View.OnClickListener{
     private FirebaseAuth authTest;
     EditText station1;
     EditText station2;
@@ -38,7 +38,7 @@ public class Overstap extends AppCompatActivity implements View.OnClickListener{
     public void logout(){ //Go to the Main class. Called after login is complete.
         authTest.signOut();
         Log.d("Signout", "onAuthStateChanged:signed_out2");
-        Intent intent = new Intent(getApplicationContext(), Login.class);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
     }
@@ -47,13 +47,13 @@ public class Overstap extends AppCompatActivity implements View.OnClickListener{
             if (station1.getText().toString().equals("") || station2.getText().toString().equals("")){
                 Toast.makeText(this, "Er mist een veld!",Toast.LENGTH_SHORT).show();
             }else{
-                Intent i = new Intent(this, Tijd.class);
+                Intent i = new Intent(this, TijdActivity.class);
                 i.putExtra("van", station1.getText().toString());
                 i.putExtra("naar", station2.getText().toString());
                 startActivity(i);
                 finish();}
         } else if (v.getId() == R.id.verwijder) {
-            startActivity(new Intent(Overstap.this, Route.class));finish();
+            startActivity(new Intent(OverstapActivity.this, RouteActivity.class));finish();
         }
     }
     public void makeviews(){

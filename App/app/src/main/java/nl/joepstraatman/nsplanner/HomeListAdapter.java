@@ -22,6 +22,7 @@ public class HomeListAdapter extends ArrayAdapter<String> {
         this.context=context;
         this.lijst=Lijst;
     }
+
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater=context.getLayoutInflater();
         View rowView=inflater.inflate(R.layout.list_layout_home, null,true);

@@ -3,7 +3,7 @@ package nl.joepstraatman.nsplanner;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class RoutePlan extends AppCompatActivity {
+public class RoutePlanActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

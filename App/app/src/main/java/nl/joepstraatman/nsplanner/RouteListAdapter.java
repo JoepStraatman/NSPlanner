@@ -58,7 +58,8 @@ public class RouteListAdapter extends ArrayAdapter<String> {
                 if (i == 0 || i == overstappen.length()-1){
                 Spoor[i] = overstappen.getJSONObject(i).getJSONObject("Spoor").getString("content");}
             } catch (JSONException e) {
-                e.printStackTrace();}}}
+                e.printStackTrace();}}
+    }
 
     public View getView(int position,View view,ViewGroup parent) {
         LayoutInflater inflater=context.getLayoutInflater();

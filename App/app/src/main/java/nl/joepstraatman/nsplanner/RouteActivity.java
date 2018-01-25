@@ -8,33 +8,46 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Route extends AppCompatActivity{
+public class RouteActivity extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseAuth authTest;
     String naam;
     String van;
     String naar;
+    String tijd;
+    String ritNummer;
     JSONObject data;
+    private FirebaseAuth.AuthStateListener authListenerTest;
+    private static final String Tag = "Firebase_test";
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
         authTest = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         laadDataIn();
         openAdapter();
+        Button voegtoe = findViewById(R.id.voegToe);
+        voegtoe.setOnClickListener(this);
     }
 
     @Override
@@ -45,6 +58,7 @@ public class Route extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         if (item.getItemId() == R.id.mybutton) {
             logout();
         }
@@ -54,9 +68,21 @@ public class Route extends AppCompatActivity{
     public void logout(){ //Go to the Main class. Called after login is complete.
         authTest.signOut();
         Log.d("Signout", "onAuthStateChanged:signed_out2");
-        Intent intent = new Intent(getApplicationContext(), Login.class);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case (R.id.voegToe):
+                dataToFirebase();
+                Intent i = new Intent(this, RoutePlanActivity.class);
+                i.putExtra("name", naam);
+                startActivity(i);
+                break;
+        }
     }
 
     public void laadDataIn(){
@@ -64,6 +90,8 @@ public class Route extends AppCompatActivity{
         naam = extras.getString("name");
         van = extras.getString("van");
         naar = extras.getString("naar");
+        tijd = extras.getString("tijd");
+        ritNummer = extras.getString("ritnummer");
         try {
             data = new JSONObject(extras.getString("data"));
         } catch (JSONException e) {
@@ -102,4 +130,33 @@ public class Route extends AppCompatActivity{
         list.setAdapter(adapter);
         }
 
+    public void dataToFirebase(){//Get the current karmapoints of the user.
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                FirebaseUser user = authTest.getCurrentUser();
+                send(user.getUid());}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("oops","Oops something went wrong: ",databaseError.toException());
+            }
+        });
+    }
+
+    public void send(String uid){
+        //mDatabase.child("RouteActivity").setValue(score.getText().toString());
+        mDatabase.child("Onlangs").child(uid).child(naam).child("Ritnummer").setValue(ritNummer);
+        mDatabase.child("Onlangs").child(uid).child(naam).child("TijdDatum").setValue(setTijdDatum(tijd));
+        mDatabase.child("Onlangs").child(uid).child(naam).child("van").setValue(getCode(van));
+        mDatabase.child("Onlangs").child(uid).child(naam).child("naar").setValue(getCode(naar));
+    }
+
+    public String getCode(String geheel){
+        return geheel.substring(geheel.indexOf("(") + 1, geheel.indexOf(")"));
+    }
+
+    public String setTijdDatum(String tijddatum){
+        return tijddatum.substring(0,10) + "T" + tijddatum.substring(11,16);
+    }
 }

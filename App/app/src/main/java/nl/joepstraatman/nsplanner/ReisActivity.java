@@ -28,10 +28,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Reis extends AppCompatActivity implements View.OnClickListener{
+public class ReisActivity extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseAuth authTest;
     EditText station1;
@@ -71,49 +73,72 @@ public class Reis extends AppCompatActivity implements View.OnClickListener{
     public void logout(){ //Go to the Main class. Called after login is complete.
         authTest.signOut();
         Log.d("Signout", "onAuthStateChanged:signed_out2");
-        Intent intent = new Intent(getApplicationContext(), Login.class);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
     }
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, Home.class));finish();
+        startActivity(new Intent(this, HomeActivity.class));finish();
         super.onBackPressed();
     }
 
     public void onClick(View v) {
-        if (v.getId() == R.id.zoek) {
-            if (naam.getText().toString().equals("") || station1.getText().toString().equals("") || station2.getText().toString().equals("")){
-                Toast.makeText(this, "Er mist een veld!",Toast.LENGTH_SHORT).show();
-            }else{
-                Intent i = new Intent(this, Tijd.class);
-                i.putExtra("name", naam.getText().toString());
-                i.putExtra("van", station1.getText().toString());
-                i.putExtra("naar", station2.getText().toString());
-                startActivity(i);
-                finish();}
-        } else if (v.getId() == R.id.verwijder) {
-            startActivity(new Intent(Reis.this, Home.class));finish();
+
+        switch (v.getId()) {
+
+            case (R.id.zoek):
+                if (naam.getText().toString().equals("") || station1.getText().toString().equals("") || station2.getText().toString().equals("")) {
+                    Toast.makeText(this, "Er mist een veld!", Toast.LENGTH_SHORT).show();
+                } else {
+                    goToTijd();
+                } break;
+
+            case (R.id.verwijder):
+                startActivity(new Intent(ReisActivity.this, HomeActivity.class));
+                finish();
+                break;
         }
     }
+
+    public void goToTijd(){
+        Intent i = new Intent(this, TijdActivity.class);
+        i.putExtra("name", naam.getText().toString());
+        i.putExtra("van", station1.getText().toString());
+        i.putExtra("naar", station2.getText().toString());
+        i.putExtra("tijd",getCurrentTime());
+        startActivity(i);
+        finish();
+    }
+
+    public String getCurrentTime(){
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return df.format(c.getTime());
+    }
+
     public void makeviews(){
         station1 = findViewById(R.id.station1);
         station2 = findViewById(R.id.station2);
         naam = findViewById(R.id.naam);
     }
+
     public void openCategory() {//Create a new volley request to the api.
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+
             @Override
             public void onResponse(String response) {
                 jsonparser(response);
             }}, new com.android.volley.Response.ErrorListener() {
+
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println(error);}
-        })
-        {@Override
+        }){
+
+        @Override
         public Map<String, String> getHeaders() throws AuthFailureError {
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("Content-Type", "application/json");
@@ -123,7 +148,6 @@ public class Reis extends AppCompatActivity implements View.OnClickListener{
             return params;}
         };
         queue.add(stringRequest);// Add the request to the RequestQueue.
-
     }
 
     public void jsonparser(String response){ //Set the questions to the listview adapter  // load data from file
@@ -169,12 +193,11 @@ public class Reis extends AppCompatActivity implements View.OnClickListener{
             AutoCompleteTextView auto1 = findViewById(R.id.station1);
             AutoCompleteTextView auto2 = findViewById(R.id.station2);
             ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, countryNameList);
-            //ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, countryNameList);
             auto1.setAdapter(adapter);
-            auto1.setThreshold(1);//start searching from 1 character
+            auto1.setThreshold(1);
             auto1.setAdapter(adapter);
             auto2.setAdapter(adapter);
-            auto2.setThreshold(1);//start searching from 1 character
+            auto2.setThreshold(1);
             auto2.setAdapter(adapter);
         }
     }
