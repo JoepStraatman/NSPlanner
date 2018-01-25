@@ -21,3 +21,12 @@ Het route scherm werkend gekregen, tijden kloppen nu en tussenstops zitten erin.
 #  week 3
 ## day 6
 Het route scherm afgemaakt, overstappen eruit gefilterd en de vertragingen in erin gezet.
+
+## day 7
+Aan de layout gewerkt en bepaald welk kleurenschema ik wil gaan gebruiken door mijn gehele app
+
+## day 8
+Bezig geweest met firebase, maar was redelijk ziek dus niet veel verder gekomen. Wel data naar firebase kunnen sturen nu.
+
+## day 9
+Aan de slag met Firebase data ophalen
