@@ -116,6 +116,7 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
             }} catch (JSONException e) {
             e.printStackTrace();}
     }
+
     public void openAdapter(){
         JSONArray overstappen = null;
         try {

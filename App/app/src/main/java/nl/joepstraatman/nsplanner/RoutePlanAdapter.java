@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +28,16 @@ public class RoutePlanAdapter extends ArrayAdapter<String> {
 
     private final Activity context;
     private List<String> stationlijst;
+    private List<String> vertreklijst;
+    private List<String> spoorlijst;
     private static List<Integer> hoofdspoorposition = new ArrayList<Integer>();
 
-    public RoutePlanAdapter(Activity Context,List<String> Stationlijst){
+    public RoutePlanAdapter(Activity Context,List<String> Stationlijst, List<String> Vertreklijst, List<String> Spoorlijst){
         super(Context, R.layout.list_layout_route,Stationlijst);
         this.context=Context;
         this.stationlijst = Stationlijst;
+        this.vertreklijst = Vertreklijst;
+        this.spoorlijst = Spoorlijst;
             }
 
     @NonNull
@@ -40,9 +45,17 @@ public class RoutePlanAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater=context.getLayoutInflater();
         @SuppressLint("ViewHolder") View rowView=inflater.inflate(R.layout.list_layout_route, null,true);
         TextView vertrekStation = rowView.findViewById(R.id.vertrekStation);
+        TextView vertrekTijd = rowView.findViewById(R.id.vertrekTijd);
+        TextView vertrekSpoor = rowView.findViewById(R.id.vertrekSpoor);
         vertrekStation.setText(stationlijst.get(position));
-        if (containsInt(hoofdspoorposition, position)){
-            vertrekStation.setTextColor(Color.parseColor("#C50FDA"));
+        vertrekTijd.setText(vertreklijst.get(position));
+        if (!spoorlijst.get(position).equals("")){
+            vertrekSpoor.setText("Spoor: " + spoorlijst.get(position));
+        } else {
+            vertrekSpoor.setVisibility(View.INVISIBLE);
+        }
+        if (!containsInt(hoofdspoorposition, position)){
+            vertrekStation.setTextSize(TypedValue.COMPLEX_UNIT_SP,11);
         }
         return rowView;
     }
