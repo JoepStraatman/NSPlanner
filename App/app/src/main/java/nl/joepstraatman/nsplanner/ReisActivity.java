@@ -46,8 +46,10 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
     private Boolean overstap;
     private String url = "http://webservices.ns.nl/ns-api-stations-v2?_ga=2.101005377.1354008381.1516190474-680113843.1477057522";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reis);
         laadDataIn();
@@ -62,19 +64,23 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         if (item.getItemId() == R.id.mybutton) {
             logout();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void logout(){ //Go to the Main class. Called after login is complete.
+    //Go to the Main class. Called after login is complete.
+    public void logout(){
+
         authTest.signOut();
         Log.d("Signout", "onAuthStateChanged:signed_out2");
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -84,6 +90,7 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
+
         startActivity(new Intent(this, HomeActivity.class));finish();
         super.onBackPressed();
     }
@@ -107,6 +114,7 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void laadDataIn(){
+
         Intent extra = getIntent();
         Bundle extras = getIntent().getExtras();
         naam = findViewById(R.id.naam);
@@ -123,27 +131,35 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void goToTijd(){
+
         Intent i = new Intent(this, TijdActivity.class);
         i.putExtra("name", naam.getText().toString());
         i.putExtra("van", station1.getText().toString());
         i.putExtra("naar", station2.getText().toString());
         i.putExtra("tijd",getCurrentTime());
+        if (overstap != null) {
+            i.putExtra("overstap", overstap);
+        }
         startActivity(i);
         finish();
     }
 
     public String getCurrentTime(){
+
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return df.format(c.getTime());
     }
 
     public void makeviews(){
+
         station1 = findViewById(R.id.station1);
         station2 = findViewById(R.id.station2);
     }
 
-    public void openCategory() {//Create a new volley request to the api.
+    //Create a new volley request to the api.
+    public void openCategory() {
+
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
 
@@ -159,6 +175,7 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public Map<String, String> getHeaders() throws AuthFailureError {
+
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("Content-Type", "application/json");
             String creds = String.format("%s:%s","straatmanjoep@gmail.com","bnjf-LP20gR1WNnYeZ2RYyDvYItt-PtN2Go1ulSipoWfrY42SIuhHA");
@@ -166,22 +183,26 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
             params.put("Authorization", auth);
             return params;}
         };
-        queue.add(stringRequest);// Add the request to the RequestQueue.
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
 
-    public void jsonparser(String response){ //Set the questions to the listview adapter  // load data from file
+    public void jsonparser(String response){
+
         String newResponse = printResponse(response);
         try {
             JSONObject newjsonObj = new JSONObject(newResponse);
             String reisString = newjsonObj.getString("Stations");
             JSONObject reisObj = new JSONObject(reisString);
-            ja_data = reisObj.getJSONArray("Station"); // Get all the travel posibilities in a list
+            ja_data = reisObj.getJSONArray("Station");
         } catch (JSONException e) {
             throw new RuntimeException(e);
-        }getQuestion();
+        }getData();
     }
 
-    public String printResponse(String response) {// parse the xml response to json
+    // parse the xml response to json
+    public String printResponse(String response) {
+
         JSONObject jsonObj = null;
         try {
             jsonObj = XML.toJSONObject(response);
@@ -193,7 +214,8 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         return jsonObj.toString();
     }
 
-    public void getQuestion(){//Get the questions from the response.
+    public void getData(){
+
         JSONArray jArray = ja_data;
         if (jArray != null) {
             countryNameList = new String[jArray.length()];
@@ -208,6 +230,7 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setAutoAdapter(){
+
         if (countryNameList != null){
             AutoCompleteTextView auto1 = findViewById(R.id.station1);
             AutoCompleteTextView auto2 = findViewById(R.id.station2);

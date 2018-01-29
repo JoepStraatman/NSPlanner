@@ -14,8 +14,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class OverstapActivity extends AppCompatActivity implements View.OnClickListener{
     private FirebaseAuth authTest;
-    EditText station1;
-    EditText station2;
+    private EditText station1;
+    private EditText station2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -35,12 +35,13 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
     String tijd;
     String ritNummer;
     JSONObject data;
-    private FirebaseAuth.AuthStateListener authListenerTest;
-    private static final String Tag = "Firebase_test";
+    private Boolean overstap;
     private DatabaseReference mDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
         authTest = FirebaseAuth.getInstance();
@@ -53,6 +54,7 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -66,7 +68,9 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
-    public void logout(){ //Go to the Main class. Called after login is complete.
+    //Go to the Main class. Called after login is complete.
+    public void logout(){
+
         authTest.signOut();
         Log.d("Signout", "onAuthStateChanged:signed_out2");
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -78,20 +82,23 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
 
         switch (v.getId()) {
             case (R.id.voegToe):
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
+
+                dataToFirebase();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable(){
                     @Override
                     public void run() {
-                        dataToFirebase();
+                        goToRoutePlan();
                     }
                 }, 1000);
-                goToRoutePlan();
                 break;
         }
     }
 
     public void laadDataIn(){
+
         Bundle extras = getIntent().getExtras();
+        checkIfOverstap(extras);
         naam = extras.getString("name");
         van = extras.getString("van");
         naar = extras.getString("naar");
@@ -105,29 +112,45 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         setTextViews();
     }
 
+    private void checkIfOverstap(Bundle extras){
+
+        Intent extra = getIntent();
+
+        if (extra.hasExtra("overstap")) {
+            overstap = extras.getBoolean("overstap"); }
+    }
+
     public void setTextViews(){
+
         TextView vanV = findViewById(R.id.van);
         TextView naarV = findViewById(R.id.naar);
         TextView reistijd = findViewById(R.id.reisTijd);
         TextView reistijdVertraging = findViewById(R.id.reisVertraging);
         vanV.setText(van);
         naarV.setText(naar);
+
         try {
             reistijd.setText("Reistijd: " + data.getString("GeplandeReisTijd"));
+
             if (!data.getString("GeplandeReisTijd").equals(data.getString("ActueleReisTijd"))){
                 reistijdVertraging.setText(data.getString("ActueleReisTijd"));
                 reistijd.setPaintFlags(reistijd.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            }} catch (JSONException e) {
-            e.printStackTrace();}
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void openAdapter(){
+
         JSONArray overstappen = null;
         try {
             JSONObject reisdeel = new JSONObject(data.getString("ReisDeel"));
             Log.d("reis12", reisdeel.toString());
             overstappen = (reisdeel.getJSONArray("ReisStop"));
-        } catch (JSONException e) {
+        }
+        catch (JSONException e) {
             e.printStackTrace();
         }
         String[] overstapLijst = new String[overstappen.length()];
@@ -136,8 +159,10 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         list.setAdapter(adapter);
     }
 
-    public void dataToFirebase(){//Get the current karmapoints of the user.
-        mDatabase.addValueEventListener(new ValueEventListener() {
+    public void dataToFirebase(){
+
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 FirebaseUser user = authTest.getCurrentUser();
@@ -146,13 +171,17 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
                 Log.w("oops","Oops something went wrong: ",databaseError.toException());
             }
         });
     }
 
-    public void send(String uid){
-        //mDatabase.child("RouteActivity").setValue(score.getText().toString());
+    public void send(final String uid){
+
+        if (overstap == null) {
+            mDatabase.child("Onlangs").child(uid).child(naam).setValue(null);
+        }
         mDatabase.child("Onlangs").child(uid).child(naam).child(getCodeVanNaar()).child("Ritnummer").setValue(ritNummer);
         mDatabase.child("Onlangs").child(uid).child(naam).child(getCodeVanNaar()).child("TijdDatum").setValue(setTijdDatum(tijd));
         mDatabase.child("Onlangs").child(uid).child(naam).child(getCodeVanNaar()).child("Van").setValue(getCode(van));
@@ -160,6 +189,7 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void goToRoutePlan(){
+
         Intent i = new Intent(this, RoutePlanActivity.class);
         i.putExtra("name", naam);
         startActivity(i);
@@ -167,14 +197,17 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public String getCode(String geheel){
+
         return geheel.substring(geheel.indexOf("(") + 1, geheel.indexOf(")"));
     }
 
     public String setTijdDatum(String tijddatum){
+
         return tijddatum.substring(0,10) + "T" + tijddatum.substring(11,16);
     }
 
     public String getCodeVanNaar(){
+
         return getCode(van) + getCode(naar);
     }
 }

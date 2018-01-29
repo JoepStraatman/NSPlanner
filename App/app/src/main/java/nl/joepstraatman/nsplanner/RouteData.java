@@ -5,10 +5,12 @@ package nl.joepstraatman.nsplanner;
  */
 
 public class RouteData {
+
     public String Ritnummer;
     public String TijdDatum;
     public String Van;
     public String Naar;
+
 
     public RouteData(){
     }

@@ -32,16 +32,19 @@ public class RoutePlanAdapter extends ArrayAdapter<String> {
     private List<String> spoorlijst;
     private static List<Integer> hoofdspoorposition = new ArrayList<Integer>();
 
+
     public RoutePlanAdapter(Activity Context,List<String> Stationlijst, List<String> Vertreklijst, List<String> Spoorlijst){
+
         super(Context, R.layout.list_layout_route,Stationlijst);
         this.context=Context;
         this.stationlijst = Stationlijst;
         this.vertreklijst = Vertreklijst;
         this.spoorlijst = Spoorlijst;
-            }
+    }
 
     @NonNull
     public View getView(int position, View view, @NonNull ViewGroup parent) {
+
         LayoutInflater inflater=context.getLayoutInflater();
         @SuppressLint("ViewHolder") View rowView=inflater.inflate(R.layout.list_layout_route, null,true);
         TextView vertrekStation = rowView.findViewById(R.id.vertrekStation);
@@ -49,6 +52,7 @@ public class RoutePlanAdapter extends ArrayAdapter<String> {
         TextView vertrekSpoor = rowView.findViewById(R.id.vertrekSpoor);
         vertrekStation.setText(stationlijst.get(position));
         vertrekTijd.setText(vertreklijst.get(position));
+
         if (!spoorlijst.get(position).equals("")){
             vertrekSpoor.setText("Spoor: " + spoorlijst.get(position));
         } else {
@@ -61,14 +65,17 @@ public class RoutePlanAdapter extends ArrayAdapter<String> {
     }
 
     public boolean containsInt(final List<Integer> array, final int key) {
+
         return array.contains(key);
     }
 
     public void addStationPosition(int pos){
+
         hoofdspoorposition.add(pos);
     }
 
     public int getStationMaxPosition(){
+
         return Collections.max(hoofdspoorposition);
     }
 }

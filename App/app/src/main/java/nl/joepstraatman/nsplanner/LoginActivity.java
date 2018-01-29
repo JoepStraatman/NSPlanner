@@ -26,8 +26,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     String email;
     String password;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //getWindow().getDecorView().setBackgroundColor(Color.parseColor("#D6896A"));
@@ -40,6 +42,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void onClick(View v) {
+
         TextView emailv = findViewById(R.id.email);
         TextView passwordv = findViewById(R.id.password);
         email = emailv.getText().toString();
@@ -55,14 +58,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onStart() {
+
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
     protected void onStop() {
+
         super.onStop();
-        if(mAuthListener != null){
+        if (mAuthListener != null){
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
@@ -72,6 +77,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+
                         if (!task.isSuccessful()) {
                             try {
                                 throw task.getException();
@@ -89,7 +95,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         Toast.LENGTH_SHORT).show();
                             }  catch (Exception e) {
                                 Log.d("Error", "onComplete: " + e.getMessage());}
-                        }else{
+                        } else {
                             logIn(); //Log the user in after creating the account.
                         }
                     }
@@ -101,10 +107,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {// Sign in success, update UI with the signed-in user's information
+
+                        // Sign in success, update UI with the signed-in user's information
+                        if (task.isSuccessful()) {
                             Log.d("sign in succesfully", "signInWithEmail:success");
                             Toast.makeText(LoginActivity.this, "User " +email+ " signed in!",Toast.LENGTH_SHORT).show();
-                        } else {// If sign in fails, display a message to the user.
+                        }
+                        // If sign in fails, display a message to the user.
+                        else {
                             Log.w("Failed to login", "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",Toast.LENGTH_SHORT).show();}
                     }
@@ -112,21 +122,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void next(){ //Go to the Main class. Called after login is complete.
+
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
         finish();
     }
 
     public void authlistener(){ //Check if the user is logged in.
-        //FirebaseAuth.AuthStateListener mAuthListener;
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
+
                 if (user!= null){
                     Log.d("Signed in", "onAuthStateChanged:signed_in:" + user.getUid());
                     next();
-                }else{
+                } else {
                     Log.d("Signed out", "onAuthStateChanged:signed_out");
                 }
             }

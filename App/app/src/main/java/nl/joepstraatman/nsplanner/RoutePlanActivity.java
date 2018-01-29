@@ -41,7 +41,7 @@ import java.util.Map;
 
 public class RoutePlanActivity extends AppCompatActivity implements View.OnClickListener{
 
-    String naam;
+    private String naam;
     private FirebaseAuth authTest;
     private FirebaseAuth.AuthStateListener authListenerTest;
     private static final String Tag = "Firebase_test";
@@ -71,10 +71,15 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         Button voegtoe = findViewById(R.id.voegToe);
         voegtoe.setOnClickListener(this);
         getRouteFromFirebase();
-        //setList();
-
         openAdapter();
-        //addToList();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        startActivity(new Intent(this, HomeActivity.class));
+        finish();
+        super.onBackPressed();
     }
 
     @Override
@@ -136,7 +141,6 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
                     saveFirebasedata(routedata);
                 }
                 getFromApiLoop();
-                //openAdapter();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

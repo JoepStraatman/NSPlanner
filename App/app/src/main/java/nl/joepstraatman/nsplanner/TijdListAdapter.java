@@ -14,6 +14,7 @@ import android.widget.TextView;
  */
 
 public class TijdListAdapter extends ArrayAdapter<String> {
+
     private final Activity context;
     private final String[] begin;
     private final String[] eind;
@@ -31,7 +32,9 @@ public class TijdListAdapter extends ArrayAdapter<String> {
     private TextView reisVertragingTijd;
     private ImageView statusView;
 
+
     public TijdListAdapter(Activity context, String[] Begin, String[] Eind, String[] ReisT, String[] VertrekV, String[] AankomstV, String[] ReisV, String[] StatusR) {
+
         super(context, R.layout.list_layout_tijd,Begin);
         this.context=context;
         this.begin=Begin;
@@ -42,7 +45,9 @@ public class TijdListAdapter extends ArrayAdapter<String> {
         this.reisV=ReisV;
         this.statusR=StatusR;
     }
+
     public View getView(int position,View view,ViewGroup parent) {
+
         LayoutInflater inflater=context.getLayoutInflater();
         View rowView=inflater.inflate(R.layout.list_layout_tijd, null,true);
         ImageView arrow = rowView.findViewById(R.id.arrow);
@@ -65,8 +70,10 @@ public class TijdListAdapter extends ArrayAdapter<String> {
             statusView.setVisibility(View.VISIBLE);
         }
         return rowView;
-    };
+    }
+
     private void findViews(View rowView){
+
         beginTijd = rowView.findViewById(R.id.begin);
         eindTijd = rowView.findViewById(R.id.eind);
         reisTijd = rowView.findViewById(R.id.reistijd);
