@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -41,12 +42,15 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
     EditText naam;
     public JSONArray ja_data = null;
     public String[] countryNameList;
+    private String name;
+    private Boolean overstap;
     private String url = "http://webservices.ns.nl/ns-api-stations-v2?_ga=2.101005377.1354008381.1516190474-680113843.1477057522";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reis);
+        laadDataIn();
         makeviews();
         authTest = FirebaseAuth.getInstance();
         Button zoek = findViewById(R.id.zoek);
@@ -102,6 +106,22 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public void laadDataIn(){
+        Intent extra = getIntent();
+        Bundle extras = getIntent().getExtras();
+        naam = findViewById(R.id.naam);
+        if (extra.hasExtra("name")) {
+            name = extras.getString("name");
+            naam.setText(name.toString());
+        }
+        if (extra.hasExtra("overstap")) {
+            overstap = extras.getBoolean("overstap");
+            naam.setVisibility(View.INVISIBLE);
+            TextView textNaam = findViewById(R.id.textnaam);
+            textNaam.setVisibility(View.INVISIBLE);
+        }
+    }
+
     public void goToTijd(){
         Intent i = new Intent(this, TijdActivity.class);
         i.putExtra("name", naam.getText().toString());
@@ -121,7 +141,6 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
     public void makeviews(){
         station1 = findViewById(R.id.station1);
         station2 = findViewById(R.id.station2);
-        naam = findViewById(R.id.naam);
     }
 
     public void openCategory() {//Create a new volley request to the api.

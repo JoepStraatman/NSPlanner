@@ -2,6 +2,7 @@ package nl.joepstraatman.nsplanner;
 
 import android.content.Intent;
 import android.graphics.Paint;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -77,11 +78,14 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
 
         switch (v.getId()) {
             case (R.id.voegToe):
-                dataToFirebase();
-                Intent i = new Intent(this, RoutePlanActivity.class);
-                i.putExtra("name", naam);
-                startActivity(i);
-                finish();
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dataToFirebase();
+                    }
+                }, 1000);
+                goToRoutePlan();
                 break;
         }
     }
@@ -137,7 +141,8 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 FirebaseUser user = authTest.getCurrentUser();
-                send(user.getUid());}
+                send(user.getUid());
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -152,6 +157,13 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         mDatabase.child("Onlangs").child(uid).child(naam).child(getCodeVanNaar()).child("TijdDatum").setValue(setTijdDatum(tijd));
         mDatabase.child("Onlangs").child(uid).child(naam).child(getCodeVanNaar()).child("Van").setValue(getCode(van));
         mDatabase.child("Onlangs").child(uid).child(naam).child(getCodeVanNaar()).child("Naar").setValue(getCode(naar));
+    }
+
+    public void goToRoutePlan(){
+        Intent i = new Intent(this, RoutePlanActivity.class);
+        i.putExtra("name", naam);
+        startActivity(i);
+        finish();
     }
 
     public String getCode(String geheel){

@@ -7,6 +7,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,7 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RoutePlanActivity extends AppCompatActivity {
+public class RoutePlanActivity extends AppCompatActivity implements View.OnClickListener{
 
     String naam;
     private FirebaseAuth authTest;
@@ -66,6 +68,8 @@ public class RoutePlanActivity extends AppCompatActivity {
         authTest = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         laadDataIn();
+        Button voegtoe = findViewById(R.id.voegToe);
+        voegtoe.setOnClickListener(this);
         getRouteFromFirebase();
         //setList();
 
@@ -94,6 +98,19 @@ public class RoutePlanActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case (R.id.voegToe):
+                Intent i = new Intent(this, ReisActivity.class);
+                i.putExtra("name", naam);
+                i.putExtra("overstap", true);
+                startActivity(i);
+                finish();
+                break;
+        }
     }
 
     public void laadDataIn(){
@@ -126,7 +143,7 @@ public class RoutePlanActivity extends AppCompatActivity {
                 Log.w("canceledload", "loadPost:onCancelled", databaseError.toException());
             }
         };
-        mDatabase.addValueEventListener(postListener);
+        mDatabase.addListenerForSingleValueEvent(postListener);
 
     }
 
@@ -227,10 +244,10 @@ public class RoutePlanActivity extends AppCompatActivity {
         } catch (JSONException e) {
             Log.e("JSON exception", e.getMessage());
             e.printStackTrace();
-        }//getQuestion();
+        }
     }
 
-    public String printResponse(String response) {// parse the xml response to json
+    public String printResponse(String response) {
         JSONObject jsonObj = null;
         try {
             jsonObj = XML.toJSONObject(response);
@@ -265,7 +282,7 @@ public class RoutePlanActivity extends AppCompatActivity {
                     giveToAdapter(filterOverstap.getString(i));
                 }
             }
-            catch (JSONException e) { //throw new RuntimeException(e);
+            catch (JSONException e) {
                 Log.e("JSON exception", e.getMessage());
                 e.printStackTrace();
             }
@@ -282,38 +299,26 @@ public class RoutePlanActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         for (int i = 0; i < overstappen.length(); i ++){
-
-            try {
-                //if (!stationlijst.contains(overstappen.getJSONObject(i).getString("Naam"))){
-                    stationlijst.add(overstappen.getJSONObject(i).getString("Naam"));
-                    vertreklijst.add(overstappen.getJSONObject(i).getString("Tijd").substring(11,16));
-                    if (i == 0 || i == overstappen.length()-1){
-                        spoorlijst.add(overstappen.getJSONObject(i).getJSONObject("Spoor").getString("content"));
-                        adapter.addStationPosition(spoorlijst.size()-1);
-                    } else {
-                        spoorlijst.add("");
-
-                    }
-                    Log.d("statlijst", stationlijst.toString());
-                    addToList();
-                //}
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            getItemsFromObject(i);
         }
     }
 
-   /* public void getQuestion(){//Get the questions from the response.
-        JSONArray jArray = filterOverstap;
-        if (jArray != null) {
-            for (int i = 0; i < jArray.length(); i++) {try {
-                JSONObject jsonArray2 = new JSONObject(jArray.getString(i));
-                *//*arrayList[i] = jsonArray2.toString();
-                vertrek[i] = (jsonArray2.getString("GeplandeVertrekTijd").substring(11,16));
-                aankomst[i] = (jsonArray2.getString("GeplandeAankomstTijd").substring(11,16));
-                reistijd[i] = (jsonArray2.getString("GeplandeReisTijd"));*//*
-            } catch (JSONException e) {throw new RuntimeException(e);}
+    private void getItemsFromObject(int i){
+        try {
+            stationlijst.add(overstappen.getJSONObject(i).getString("Naam"));
+            vertreklijst.add(overstappen.getJSONObject(i).getString("Tijd").substring(11,16));
+            if (i == 0 || i == overstappen.length()-1){
+                spoorlijst.add(overstappen.getJSONObject(i).getJSONObject("Spoor").getString("content"));
+                adapter.addStationPosition(spoorlijst.size()-1);
+            } else {
+                spoorlijst.add("");
             }
-        }openAdapter();
-    }*/
+            Log.d("statlijst", stationlijst.toString());
+            addToList();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
