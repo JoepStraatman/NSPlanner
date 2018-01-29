@@ -35,6 +35,10 @@ public class RoutePlanActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private List<String> stationlijst;
     private RoutePlanAdapter adapter;
+    private ArrayList<String> ritnummerList = new ArrayList<>();
+    private ArrayList<String> tijddatumList = new ArrayList<>();
+    private ArrayList<String> naarList = new ArrayList<>();
+    private ArrayList<String> vanList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,14 +84,45 @@ public class RoutePlanActivity extends AppCompatActivity {
     }
 
     public void getRouteFromFirebase(){
+        ValueEventListener postListener = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                FirebaseUser user = authTest.getCurrentUser();
+                DataSnapshot naamsnapshot = dataSnapshot.child("Onlangs/"+user.getUid()+"/"+naam);
+                Iterable<DataSnapshot> naamChildren = naamsnapshot.getChildren();
+
+                for (DataSnapshot naam : naamChildren) {
+
+                    RouteData routedata = naam.getValue(RouteData.class);
+                    saveFirebasedata(routedata);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("canceledload", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        mDatabase.addValueEventListener(postListener);
+    }
+
+    private void saveFirebasedata(RouteData routeData){
+
+        ritnummerList.add(routeData.Ritnummer);
+        tijddatumList.add(routeData.TijdDatum);
+        naarList.add(routeData.Naar);
+        vanList.add(routeData.Van);
+    }
+
+  /*  public void getRouteFromFirebase2(){
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 FirebaseUser user = authTest.getCurrentUser();
-                /*RouteData routedata = dataSnapshot.child("Onlangs/"+user.getUid()+"/"+naam).getValue(RouteData.class);
+                *//*RouteData routedata = dataSnapshot.child("Onlangs/"+user.getUid()+"/"+naam).getValue(RouteData.class);
                 if (routedata != null){
                     Log.d("fireroute", routedata.Ritnummer+ " - " + routedata.TijdDatum + " - " + routedata.Naar + " - " + routedata.Van);
-                }*/
+                }*//*
                 DataSnapshot naamsnapshot = dataSnapshot.child("Onlangs/"+user.getUid()+"/"+naam);
                 Iterable<DataSnapshot> naamChildren = naamsnapshot.getChildren();
                 for (DataSnapshot naam : naamChildren) {
@@ -102,7 +137,7 @@ public class RoutePlanActivity extends AppCompatActivity {
                 //startActivity(new Intent(getApplicationContext(), Home_screen.class));finish();
             }
         });
-    }
+    }*/
     public void openAdapter(){
         adapter = new RoutePlanAdapter(this,stationlijst);
         ListView list = findViewById(R.id.routeplanlist);
