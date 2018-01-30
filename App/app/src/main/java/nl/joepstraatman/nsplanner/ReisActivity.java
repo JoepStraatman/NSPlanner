@@ -49,6 +49,7 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
     public String[] countryNameList;
     private String name;
     private Boolean overstap;
+    private Button soort, tijd, datum;
     private String url = "http://webservices.ns.nl/ns-api-stations-v2?_ga=2.101005377.1354008381.1516190474-680113843.1477057522";
     private int day, month, year, hour, minute;
     private int dayfinal, monthfinal, yearfinal, hourfinal, minutefinal;
@@ -62,14 +63,21 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         laadDataIn();
         makeviews();
         authTest = FirebaseAuth.getInstance();
+
         Button zoek = findViewById(R.id.zoek);
         Button verwijder = findViewById(R.id.verwijder);
-        Button tijd = findViewById(R.id.tijd);
-        Button datum = findViewById(R.id.datum);
+        tijd = findViewById(R.id.tijd);
+        datum = findViewById(R.id.datum);
+        soort = findViewById(R.id.soort);
+
         tijd.setOnClickListener(this);
         datum.setOnClickListener(this);
         zoek.setOnClickListener(this);
+        soort.setOnClickListener(this);
         verwijder.setOnClickListener(this);
+
+        getCurrentTime();
+        getCurrentDate();
         openCategory();
     }
 
@@ -122,6 +130,15 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
                 break;
 
+            case (R.id.soort):
+                if (soort.getText().equals("Vertrek: ")){
+                    soort.setText("Aankomst:");
+                }
+                else {
+                    soort.setText("Vertrek: ");
+                }
+                break;
+
             case (R.id.datum):
                 Calendar c = Calendar.getInstance();
                 year = c.get(Calendar.YEAR);
@@ -130,6 +147,7 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
 
                 DatePickerDialog dateD = new DatePickerDialog(this, this, year, month, day);
                 dateD.show();
+                break;
 
             case (R.id.tijd):
                 Calendar t = Calendar.getInstance();
@@ -164,7 +182,7 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         i.putExtra("name", naam.getText().toString());
         i.putExtra("van", station1.getText().toString());
         i.putExtra("naar", station2.getText().toString());
-        i.putExtra("tijd",getCurrentTime());
+        i.putExtra("tijd",sendTimeDate());
         if (overstap != null) {
             i.putExtra("overstap", overstap);
         }
@@ -172,7 +190,19 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
-    public String getCurrentTime(){
+    public void getCurrentTime(){
+
+        Calendar c = Calendar.getInstance();
+        tijd.setText(c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE));
+    }
+
+    public void getCurrentDate(){
+
+        Calendar c = Calendar.getInstance();
+        datum.setText(c.get(Calendar.DAY_OF_MONTH) + "-" + (c.get(Calendar.MONTH)+1) + "-" + c.get(Calendar.YEAR));
+    }
+
+    public String sendTimeDate(){
 
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -275,15 +305,15 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
         yearfinal = i;
-        monthfinal = i1;
+        monthfinal = i1 +1;
         dayfinal = i2;
-        Toast.makeText(this, yearfinal + " " + (monthfinal+1) + " " + dayfinal, Toast.LENGTH_LONG).show();
+        datum.setText(dayfinal + "-" + monthfinal + "-" + yearfinal);
     }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
         hourfinal = i;
         minutefinal = i1;
-        Toast.makeText(this, hourfinal + " " + minutefinal, Toast.LENGTH_LONG).show();
+        tijd.setText(hourfinal + ":" + minutefinal);
     }
 }

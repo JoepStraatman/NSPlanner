@@ -111,21 +111,36 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:weightSum="1"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/tijd"
-                android:layout_width="wrap_content"
+                android:id="@+id/soort"
+                android:textAllCaps="false"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Tijd" />
+                android:layout_weight=".3"
+                android:text="Vertrek: " />
+
+            <Button
+                android:id="@+id/tijd"
+                android:textColor="#ffffff"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight=".35"
+                android:layout_marginRight="2dp"
+                android:background="@color/licht"
+                android:text="00:00" />
 
             <Button
                 android:id="@+id/datum"
-                android:layout_width="wrap_content"
+                android:textColor="#ffffff"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="datum" />
+                android:layout_weight=".35"
+                android:background="@color/licht"
+                android:layout_marginRight="2dp"
+                android:text="00-00-0000" />
         </LinearLayout>
 
         <LinearLayout
