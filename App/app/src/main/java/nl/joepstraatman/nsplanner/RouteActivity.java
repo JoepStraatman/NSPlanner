@@ -26,6 +26,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 public class RouteActivity extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseAuth authTest;
@@ -33,6 +35,7 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
     String van;
     String naar;
     String tijd;
+    private String status;
     String ritNummer;
     JSONObject data;
     private Boolean overstap;
@@ -98,7 +101,7 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
     public void laadDataIn(){
 
         Bundle extras = getIntent().getExtras();
-        checkIfOverstap(extras);
+        checkIfOverstapAndVertraging(extras);
         naam = extras.getString("name");
         van = extras.getString("van");
         naar = extras.getString("naar");
@@ -112,12 +115,19 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         setTextViews();
     }
 
-    private void checkIfOverstap(Bundle extras){
+    private void checkIfOverstapAndVertraging(Bundle extras){
 
         Intent extra = getIntent();
 
         if (extra.hasExtra("overstap")) {
-            overstap = extras.getBoolean("overstap"); }
+            overstap = extras.getBoolean("overstap");
+        }
+        if (extra.hasExtra("status")){
+            status = extras.getString("status");
+            TextView fout = findViewById(R.id.fout);
+            fout.setVisibility(View.VISIBLE);
+            fout.setText(status);
+        }
     }
 
     public void setTextViews(){
@@ -182,10 +192,12 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         if (overstap == null) {
             mDatabase.child("Onlangs").child(uid).child(naam).setValue(null);
         }
-        mDatabase.child("Onlangs").child(uid).child(naam).child(getCodeVanNaar()).child("Ritnummer").setValue(ritNummer);
-        mDatabase.child("Onlangs").child(uid).child(naam).child(getCodeVanNaar()).child("TijdDatum").setValue(setTijdDatum(tijd));
-        mDatabase.child("Onlangs").child(uid).child(naam).child(getCodeVanNaar()).child("Van").setValue(getCode(van));
-        mDatabase.child("Onlangs").child(uid).child(naam).child(getCodeVanNaar()).child("Naar").setValue(getCode(naar));
+        String currenttimestamp = getTimestamp();
+        Log.d("timestampje", currenttimestamp);
+        mDatabase.child("Onlangs").child(uid).child(naam).child(currenttimestamp).child("Ritnummer").setValue(ritNummer);
+        mDatabase.child("Onlangs").child(uid).child(naam).child(currenttimestamp).child("TijdDatum").setValue(tijd);
+        mDatabase.child("Onlangs").child(uid).child(naam).child(currenttimestamp).child("Van").setValue(getCode(van));
+        mDatabase.child("Onlangs").child(uid).child(naam).child(currenttimestamp).child("Naar").setValue(getCode(naar));
     }
 
     public void goToRoutePlan(){
@@ -201,13 +213,9 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         return geheel.substring(geheel.indexOf("(") + 1, geheel.indexOf(")"));
     }
 
-    public String setTijdDatum(String tijddatum){
+    public String getTimestamp(){
 
-        return tijddatum.substring(0,10) + "T" + tijddatum.substring(11,16);
-    }
-
-    public String getCodeVanNaar(){
-
-        return getCode(van) + getCode(naar);
+        Calendar t = Calendar.getInstance();
+        return (t.get(Calendar.YEAR) + "" + t.get(Calendar.MONTH) + "" + t.get(Calendar.DAY_OF_MONTH) + "" + t.get(Calendar.HOUR_OF_DAY) + "" + t.get(Calendar.MINUTE) + "" + t.get(Calendar.SECOND) + "" + t.get(Calendar.MILLISECOND));
     }
 }

@@ -36,6 +36,16 @@
         android:gravity="center_horizontal"
         android:text="Naar" />
 
+    <TextView
+        android:id="@+id/fout"
+        android:background="#990000"
+        android:textAlignment="center"
+        android:alpha=".8"
+        android:visibility="invisible"
+        android:textColor="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

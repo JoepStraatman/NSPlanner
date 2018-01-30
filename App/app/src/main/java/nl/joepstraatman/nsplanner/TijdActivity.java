@@ -48,6 +48,7 @@ public class TijdActivity extends Activity {
     private String naarCode;
     private String van;
     private String naar;
+    private String soort;
     private String[] ritNummer;
     private String tijd;
     private String[] statusReis;
@@ -104,7 +105,8 @@ public class TijdActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         Intent extra = getIntent();
         if ( extras.getString("van") != null){
-        naam = extras.getString("name");}
+            naam = extras.getString("name");}
+        soort = extras.getString("departure");
         van = extras.getString("van");
         naar = extras.getString("naar");
         station1 = findViewById(R.id.van);
@@ -120,7 +122,14 @@ public class TijdActivity extends Activity {
 
         vanCode = van.substring(van.indexOf("(") + 1, van.indexOf(")"));
         naarCode = naar.substring(naar.indexOf("(") + 1, naar.indexOf(")"));
-        url = "http://webservices.ns.nl/ns-api-treinplanner?fromStation="+vanCode+"&toStation="+naarCode;
+        Boolean departure;
+        if (soort.equals("Vertrek: ")){
+            departure = true;
+        }
+        else {
+            departure = false;
+        }
+        url = "http://webservices.ns.nl/ns-api-treinplanner?fromStation=" + vanCode + "&toStation=" + naarCode + "&dateTime=" + tijd + "&departure=" + departure;
     }
 
     //Create a new volley request to the api.
@@ -288,6 +297,9 @@ public class TijdActivity extends Activity {
         i.putExtra("tijd", tijd);
         i.putExtra("data", arrayList[pos]);
         i.putExtra("ritnummer", ritNummer[pos]);
+        if (statusReis[pos].equals("NIET-MOGELIJK") || statusReis[pos].equals("GEANNULEERD") || statusReis[pos].equals("OVERSTAP-NIET-MOGELIJK")){
+            i.putExtra("status", statusReis[pos]);
+        }
         if (overstap != null) {
             i.putExtra("overstap", overstap);
         }

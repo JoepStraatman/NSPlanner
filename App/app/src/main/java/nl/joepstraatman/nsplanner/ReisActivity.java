@@ -183,6 +183,7 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         i.putExtra("van", station1.getText().toString());
         i.putExtra("naar", station2.getText().toString());
         i.putExtra("tijd",sendTimeDate());
+        i.putExtra("departure", soort.getText());
         if (overstap != null) {
             i.putExtra("overstap", overstap);
         }
@@ -193,20 +194,29 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
     public void getCurrentTime(){
 
         Calendar c = Calendar.getInstance();
-        tijd.setText(c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE));
+        hourfinal = c.get(Calendar.HOUR_OF_DAY);
+        minutefinal = c.get(Calendar.MINUTE);
+        if (minutefinal < 10) {
+            tijd.setText(hourfinal + ":0" + minutefinal);
+        }
+        else{
+            tijd.setText(hourfinal + ":" + minutefinal);
+        }
     }
 
     public void getCurrentDate(){
 
         Calendar c = Calendar.getInstance();
-        datum.setText(c.get(Calendar.DAY_OF_MONTH) + "-" + (c.get(Calendar.MONTH)+1) + "-" + c.get(Calendar.YEAR));
+        yearfinal = c.get(Calendar.YEAR);
+        monthfinal = (c.get(Calendar.MONTH)+1);
+        dayfinal = c.get(Calendar.DAY_OF_MONTH);
+        datum.setText(dayfinal + "-" + monthfinal + "-" + yearfinal);
     }
 
     public String sendTimeDate(){
-
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return df.format(c.getTime());
+        String dat = yearfinal + "-" + monthfinal + "-" + dayfinal;
+        String tijd = hourfinal + ":" + minutefinal;
+        return dat + "T" + tijd;
     }
 
     public void makeviews(){
@@ -314,6 +324,11 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
         hourfinal = i;
         minutefinal = i1;
-        tijd.setText(hourfinal + ":" + minutefinal);
+        if (minutefinal < 10) {
+            tijd.setText(hourfinal + ":0" + minutefinal);
+        }
+        else{
+            tijd.setText(hourfinal + ":" + minutefinal);
+        }
     }
 }
