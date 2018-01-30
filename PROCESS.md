@@ -30,3 +30,16 @@ Bezig geweest met firebase, maar was redelijk ziek dus niet veel verder gekomen.
 
 ## day 9
 Aan de slag met Firebase data ophalen
+
+## day 10
+Verder met Firebase, maar crasht de hele tijd.
+
+# week 3
+
+## day 11
+Firebase werkt nu volledig. Je kan een reis plannen, overstappen daaraan toevoegen. Ze komen alleen nog soms in de verkeerde volgorde.
+Ook de onlangs routes op het home scherm werken nu. 
+Code al deels gewhitespaced en wat gecommente tekst weggehaald.
+
+## day 12
+Favorieten scherm
