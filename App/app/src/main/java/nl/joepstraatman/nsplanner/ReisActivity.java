@@ -1,5 +1,7 @@
 package nl.joepstraatman.nsplanner;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,8 +13,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -29,12 +33,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ReisActivity extends AppCompatActivity implements View.OnClickListener{
+public class ReisActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
     private FirebaseAuth authTest;
     EditText station1;
@@ -45,6 +50,8 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
     private String name;
     private Boolean overstap;
     private String url = "http://webservices.ns.nl/ns-api-stations-v2?_ga=2.101005377.1354008381.1516190474-680113843.1477057522";
+    private int day, month, year, hour, minute;
+    private int dayfinal, monthfinal, yearfinal, hourfinal, minutefinal;
 
 
     @Override
@@ -57,6 +64,10 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         authTest = FirebaseAuth.getInstance();
         Button zoek = findViewById(R.id.zoek);
         Button verwijder = findViewById(R.id.verwijder);
+        Button tijd = findViewById(R.id.tijd);
+        Button datum = findViewById(R.id.datum);
+        tijd.setOnClickListener(this);
+        datum.setOnClickListener(this);
         zoek.setOnClickListener(this);
         verwijder.setOnClickListener(this);
         openCategory();
@@ -110,6 +121,23 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(ReisActivity.this, HomeActivity.class));
                 finish();
                 break;
+
+            case (R.id.datum):
+                Calendar c = Calendar.getInstance();
+                year = c.get(Calendar.YEAR);
+                month = c.get(Calendar.MONTH);
+                day = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dateD = new DatePickerDialog(this, this, year, month, day);
+                dateD.show();
+
+            case (R.id.tijd):
+                Calendar t = Calendar.getInstance();
+                hour = t.get(Calendar.HOUR_OF_DAY);
+                minute = t.get(Calendar.MINUTE);
+
+                TimePickerDialog timeD = new TimePickerDialog(this, this, hour, minute, true);
+                timeD.show();
         }
     }
 
@@ -242,5 +270,20 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
             auto2.setThreshold(1);
             auto2.setAdapter(adapter);
         }
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+        yearfinal = i;
+        monthfinal = i1;
+        dayfinal = i2;
+        Toast.makeText(this, yearfinal + " " + (monthfinal+1) + " " + dayfinal, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int i, int i1) {
+        hourfinal = i;
+        minutefinal = i1;
+        Toast.makeText(this, hourfinal + " " + minutefinal, Toast.LENGTH_LONG).show();
     }
 }

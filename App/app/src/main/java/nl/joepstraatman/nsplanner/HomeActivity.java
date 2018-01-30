@@ -103,6 +103,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void getRouteFromFirebase(){
+
         ValueEventListener postListener = new ValueEventListener() {
 
             @Override

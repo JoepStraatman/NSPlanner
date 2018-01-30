@@ -1,6 +1,9 @@
 package nl.joepstraatman.nsplanner;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -9,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,6 +51,8 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
     private FirebaseAuth.AuthStateListener authListenerTest;
     private static final String Tag = "Firebase_test";
     private DatabaseReference mDatabase;
+    private DatabaseReference onlangsdb;
+    private DatabaseReference favodb;
 
     private List<String> stationlijst = new ArrayList<>();
     private List<String> vertreklijst = new ArrayList<>();
@@ -60,6 +67,7 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
     private JSONArray ja_data = null;
     private JSONArray filterOverstap;
     private JSONArray overstappen;
+    private CheckBox favo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +77,9 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         mDatabase = FirebaseDatabase.getInstance().getReference();
         laadDataIn();
         Button voegtoe = findViewById(R.id.voegToe);
+        favo = findViewById(R.id.favorietcheck);
         voegtoe.setOnClickListener(this);
+        favo.setOnClickListener(this);
         getRouteFromFirebase();
         openAdapter();
     }
@@ -115,6 +125,15 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
                 startActivity(i);
                 finish();
                 break;
+            case (R.id.favorietcheck):
+                if (favo.isChecked()){
+                    Toast.makeText(this, "Toegevoegd!", Toast.LENGTH_LONG).show();
+                    saveToFavorieten();
+                }
+                else{
+                    Toast.makeText(this, "Verwijderd!", Toast.LENGTH_LONG).show();
+                    removeFromFavorieten();
+                }
         }
     }
 
@@ -133,7 +152,9 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
                 FirebaseUser user = authTest.getCurrentUser();
                 DataSnapshot naamsnapshot = dataSnapshot.child("Onlangs/"+user.getUid()+"/"+naam);
                 Iterable<DataSnapshot> naamChildren = naamsnapshot.getChildren();
-
+                if (dataSnapshot.hasChild("Favorieten/"+user.getUid()+"/"+naam)) {
+                    favo.setChecked(true);
+                }
                 for (DataSnapshot naam : naamChildren) {
 
                     RouteData routedata = naam.getValue(RouteData.class);
@@ -160,31 +181,6 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-  /*  public void getRouteFromFirebase2(){
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                FirebaseUser user = authTest.getCurrentUser();
-                *//*RouteData routedata = dataSnapshot.child("Onlangs/"+user.getUid()+"/"+naam).getValue(RouteData.class);
-                if (routedata != null){
-                    Log.d("fireroute", routedata.Ritnummer+ " - " + routedata.TijdDatum + " - " + routedata.Naar + " - " + routedata.Van);
-                }*//*
-                DataSnapshot naamsnapshot = dataSnapshot.child("Onlangs/"+user.getUid()+"/"+naam);
-                Iterable<DataSnapshot> naamChildren = naamsnapshot.getChildren();
-                for (DataSnapshot naam : naamChildren) {
-                    RouteData routedata = naam.getValue(RouteData.class);
-                    Log.d("fireroute", routedata.Ritnummer+ " - " + routedata.TijdDatum + " - " + routedata.Naar + " - " + routedata.Van);
-                    //contacts.add(c);
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("oops","Oops something went wrong: ",databaseError.toException());
-                //startActivity(new Intent(getApplicationContext(), Home_screen.class));finish();
-            }
-        });
-    }*/
-
     public void openAdapter(){
         adapter = new RoutePlanAdapter(this,stationlijst, vertreklijst, spoorlijst);
         ListView list = findViewById(R.id.routeplanlist);
@@ -192,12 +188,6 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void addToList(){
-        /*adapter.addStationPosition(adapter.getStationMaxPosition()+1);
-        stationlijst.add("5 NIEUW");
-        stationlijst.add("6 NIEUW");
-        stationlijst.add("7 NIEUW");
-        stationlijst.add("8 NIEUW");
-        adapter.addStationPosition(stationlijst.size()-1);*/
         adapter.notifyDataSetChanged();
     }
 
@@ -219,16 +209,19 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
             public void onErrorResponse(VolleyError error) {
                 System.out.println(error);}
         })
-        {@Override
-        public Map<String, String> getHeaders() throws AuthFailureError {
-            HashMap<String, String> params = new HashMap<String, String>();
-            params.put("Content-Type", "application/json");
-            String creds = String.format("%s:%s","straatmanjoep@gmail.com","bnjf-LP20gR1WNnYeZ2RYyDvYItt-PtN2Go1ulSipoWfrY42SIuhHA");
-            String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.NO_WRAP);
-            params.put("Authorization", auth);
-            return params;}
-        };
-        queue.add(stringRequest);// Add the request to the RequestQueue.
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                String creds = String.format("%s:%s","straatmanjoep@gmail.com","bnjf-LP20gR1WNnYeZ2RYyDvYItt-PtN2Go1ulSipoWfrY42SIuhHA");
+                String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.NO_WRAP);
+                params.put("Authorization", auth);
+                return params;}
+            };
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
 
     }
 
@@ -325,4 +318,40 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    private void saveToFavorieten(){
+
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                FirebaseUser user = authTest.getCurrentUser();
+                DataSnapshot onlangssnapshot = dataSnapshot.child("Onlangs/"+user.getUid()+"/"+naam);
+                mDatabase.child("Favorieten/"+user.getUid()+"/"+naam).setValue(onlangssnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                Log.w("oops","Oops something went wrong: ",databaseError.toException());
+            }
+        });
+    }
+
+    private void removeFromFavorieten(){
+
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                FirebaseUser user = authTest.getCurrentUser();
+                mDatabase.child("Favorieten/"+user.getUid()+"/"+naam).removeValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                Log.w("oops","Oops something went wrong: ",databaseError.toException());
+            }
+        });
+    }
 }

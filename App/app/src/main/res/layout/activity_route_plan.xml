@@ -11,34 +11,35 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:weightSum="1"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/titelnaam"
+            android:layout_weight=".85"
             android:fontFamily="monospace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
             android:gravity="center_vertical"
             android:text="Test Naam"
             android:textSize="35sp" />
 
         <TextView
             android:id="@+id/favoriet"
+            android:layout_weight=".1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="end"
             android:layout_gravity="center_vertical"
             android:text="Favoriet" />
 
         <CheckBox
-            android:id="@+id/checkBox"
+            android:id="@+id/favorietcheck"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight=".05" />
     </LinearLayout>
 
     <LinearLayout
