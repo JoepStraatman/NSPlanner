@@ -65,7 +65,6 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         authTest = FirebaseAuth.getInstance();
 
         Button zoek = findViewById(R.id.zoek);
-        Button verwijder = findViewById(R.id.verwijder);
         tijd = findViewById(R.id.tijd);
         datum = findViewById(R.id.datum);
         soort = findViewById(R.id.soort);
@@ -74,7 +73,6 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         datum.setOnClickListener(this);
         zoek.setOnClickListener(this);
         soort.setOnClickListener(this);
-        verwijder.setOnClickListener(this);
 
         getCurrentTime();
         getCurrentDate();
@@ -124,11 +122,6 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     goToTijd();
                 } break;
-
-            case (R.id.verwijder):
-                startActivity(new Intent(ReisActivity.this, HomeActivity.class));
-                finish();
-                break;
 
             case (R.id.soort):
                 if (soort.getText().equals("Vertrek: ")){

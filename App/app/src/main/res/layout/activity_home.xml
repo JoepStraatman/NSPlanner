@@ -28,64 +28,71 @@
     <TextView
         android:id="@+id/Title"
         android:textColor="#000000"
-        android:fontFamily="monospace"
+        android:fontFamily="@font/bloggersanslight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
-        android:text="Plan je reis:"
-        android:textSize="35sp" />
+        android:text="Plan je reis"
+        android:textSize="43sp" />
 
     <LinearLayout
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="10dp"
+        android:weightSum="1"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/Favoriet"
-            android:alpha=".8"
-            android:textColor="#000000"
+            android:textSize="18sp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="2dp"
+            android:textColor="#ffffff"
             android:textStyle="bold"
-            android:fontFamily="monospace"
-            android:layout_width="wrap_content"
+            android:fontFamily="@font/bloggersanslight"
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:background="#99c2ff"
-            android:layout_weight="1"
+            android:layout_weight=".5"
+            android:background="@drawable/blauwe_button"
             android:text="Favorieten"
             android:textAllCaps="false"/>
-
+        <!-- android:background="#99c2ff" -->
         <Button
             android:id="@+id/Nieuw"
-            android:textColor="#000000"
-            android:alpha=".8"
+            android:textSize="20sp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="4dp"
+            android:textColor="#ffffff"
             android:textStyle="bold"
-            android:fontFamily="monospace"
-            android:background="#99c2ff"
-            android:layout_width="wrap_content"
+            android:fontFamily="@font/bloggersanslight"
+            android:background="@drawable/blauwe_button"
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Nieuw +"
+            android:layout_weight=".5"
+            android:text="Nieuw"
             android:textAllCaps="false" />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/Laatst"
-        android:fontFamily="monospace"
-        android:textColor="#000000"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="5dp"
-        android:background="#ffffff"
-        android:text="Onlangs geweest:"
-        android:layout_marginBottom="25dp"
-        android:textSize="25sp" />
+        <TextView
+            android:id="@+id/Laatst"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="30dp"
+            android:background="#ffffff"
+            android:fontFamily="@font/bloggersanslight"
+            android:text="Recente reizen"
+            android:textColor="#000000"
+            android:textSize="25sp" />
 
     <ListView
         android:id="@+id/onlangs"
+        android:layout_marginLeft="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
