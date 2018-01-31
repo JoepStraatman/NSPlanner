@@ -3,6 +3,7 @@ package nl.joepstraatman.nsplanner;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -29,32 +30,16 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TijdActivity extends Activity {
+public class TijdActivity extends AppCompatActivity {
 
-    private String naam;
+    private String naam, van, naar, soort, tijd;
     private FirebaseAuth authTest;
-    private TextView station1;
-    private TextView station2;
     private String url;
-    private JSONArray ja_data = null;
-    private JSONArray filterOverstap;
-    private String[] vertrek;
-    private String[] aankomst;
-    private String[] reistijd;
-    private String[] vertrekVertraging;
-    private String[] aankomstVertraging;
-    private String[] reistijdVertraging;
-    private String vanCode;
-    private String naarCode;
-    private String van;
-    private String naar;
-    private String soort;
-    private String[] ritNummer;
-    private String tijd;
-    private String[] statusReis;
-    private String[] arrayList;
     private Boolean overstap;
+    private JSONArray ja_data, filterOverstap = null;
 
+    private String[] vertrek, aankomst, reistijd, vertrekVertraging, aankomstVertraging,
+            reistijdVertraging, ritNummer, statusReis, arrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +94,8 @@ public class TijdActivity extends Activity {
         soort = extras.getString("departure");
         van = extras.getString("van");
         naar = extras.getString("naar");
-        station1 = findViewById(R.id.van);
-        station2 = findViewById(R.id.naar);
+        TextView station1 = findViewById(R.id.van);
+        TextView station2 = findViewById(R.id.naar);
         station1.setText(van.toString());
         station2.setText(naar.toString());
         tijd = extras.getString("tijd");
@@ -120,8 +105,8 @@ public class TijdActivity extends Activity {
 
     public void createUrl(){
 
-        vanCode = van.substring(van.indexOf("(") + 1, van.indexOf(")"));
-        naarCode = naar.substring(naar.indexOf("(") + 1, naar.indexOf(")"));
+        String vanCode = van.substring(van.indexOf("(") + 1, van.indexOf(")"));
+        String naarCode = naar.substring(naar.indexOf("(") + 1, naar.indexOf(")"));
         Boolean departure;
         if (soort.equals("Vertrek: ")){
             departure = true;
@@ -129,7 +114,8 @@ public class TijdActivity extends Activity {
         else {
             departure = false;
         }
-        url = "http://webservices.ns.nl/ns-api-treinplanner?fromStation=" + vanCode + "&toStation=" + naarCode + "&dateTime=" + tijd + "&departure=" + departure;
+        url = "http://webservices.ns.nl/ns-api-treinplanner?fromStation=" + vanCode + "&toStation="
+                + naarCode + "&dateTime=" + tijd + "&departure=" + departure;
     }
 
     //Create a new volley request to the api.
@@ -158,7 +144,6 @@ public class TijdActivity extends Activity {
         };
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
-
     }
 
     public void jsonparser(String response){

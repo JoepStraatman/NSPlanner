@@ -27,11 +27,8 @@ import java.util.List;
 public class RoutePlanAdapter extends ArrayAdapter<String> {
 
     private final Activity context;
-    private List<String> stationlijst;
-    private List<String> vertreklijst;
-    private List<String> spoorlijst;
-    private static List<Integer> hoofdspoorposition = new ArrayList<Integer>();
-
+    private List<String> stationlijst, vertreklijst, spoorlijst;
+    private List<Integer> hoofdspoorposition = new ArrayList<>();
 
     public RoutePlanAdapter(Activity Context,List<String> Stationlijst, List<String> Vertreklijst, List<String> Spoorlijst){
 
@@ -59,7 +56,9 @@ public class RoutePlanAdapter extends ArrayAdapter<String> {
             vertrekSpoor.setVisibility(View.INVISIBLE);
         }
         if (!containsInt(hoofdspoorposition, position)){
+            vertrekTijd.setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
             vertrekStation.setTextSize(TypedValue.COMPLEX_UNIT_SP,11);
+            vertrekSpoor.setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
         }
         return rowView;
     }

@@ -10,30 +10,34 @@
 
     <TextView
         android:id="@+id/van"
-        android:fontFamily="monospace"
-        android:textStyle="bold"
+        android:fontFamily="@font/bloggersanslight"
+        android:textColor="@color/licht"
         android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
         android:text="Van" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="15dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center_horizontal"
         android:visibility="visible"
         app:srcCompat="@drawable/arrow_down" />
 
     <TextView
         android:id="@+id/naar"
-        android:fontFamily="monospace"
+        android:fontFamily="@font/bloggersanslight"
+        android:textColor="@color/licht"
         android:textSize="20sp"
-        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
         android:text="Naar" />
 
     <TextView
@@ -53,14 +57,15 @@
 
         <TextView
             android:id="@+id/reisTijd"
-            android:fontFamily="monospace"
+            android:fontFamily="@font/bloggersanslightitalic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Reistijd: " />
 
         <TextView
             android:id="@+id/reisVertraging"
-            android:fontFamily="monospace"
+            android:fontFamily="@font/bloggersanslightitalic"
+            android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#FF0000" />
@@ -68,7 +73,6 @@
 
     <ListView
         android:id="@+id/routeList"
-        android:elevation="10dp"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -76,10 +80,20 @@
 
     <Button
         android:id="@+id/voegToe"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/bloggersanslight"
+        android:layout_gravity="center"
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp"
+        android:layout_marginBottom="40dp"
+        android:textAlignment="center"
         android:gravity="bottom"
-        android:text="Voeg toe" />
+        android:textColor="#ffffff"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:background="@drawable/blauwe_button"
+        android:text="Toevoegen" />
 
 
 </LinearLayout>

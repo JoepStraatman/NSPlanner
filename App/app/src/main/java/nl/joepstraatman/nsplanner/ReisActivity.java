@@ -42,9 +42,7 @@ import java.util.Map;
 public class ReisActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
     private FirebaseAuth authTest;
-    EditText station1;
-    EditText station2;
-    EditText naam;
+    private EditText station1, station2, naam;
     public JSONArray ja_data = null;
     public String[] countryNameList;
     private String name;
@@ -117,7 +115,8 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
 
             case (R.id.zoek):
-                if (naam.getText().toString().equals("") || station1.getText().toString().equals("") || station2.getText().toString().equals("")) {
+                if (naam.getText().toString().equals("") || station1.getText().toString().equals("")
+                        || station2.getText().toString().equals("")) {
                     Toast.makeText(this, "Er mist een veld!", Toast.LENGTH_SHORT).show();
                 } else {
                     goToTijd();

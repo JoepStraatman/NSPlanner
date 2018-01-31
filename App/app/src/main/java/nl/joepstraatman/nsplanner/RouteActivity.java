@@ -31,12 +31,7 @@ import java.util.Calendar;
 public class RouteActivity extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseAuth authTest;
-    String naam;
-    String van;
-    String naar;
-    String tijd;
-    private String status;
-    String ritNummer;
+    private String naam, van, naar, tijd, status, ritNummer;
     JSONObject data;
     private Boolean overstap;
     private DatabaseReference mDatabase;
@@ -49,8 +44,10 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_route);
         authTest = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
         laadDataIn();
         openAdapter();
+
         Button voegtoe = findViewById(R.id.voegToe);
         voegtoe.setOnClickListener(this);
     }
@@ -69,6 +66,12 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
             logout();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, ReisActivity.class));finish();
+        super.onBackPressed();
     }
 
     //Go to the Main class. Called after login is complete.
@@ -93,7 +96,7 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
                     public void run() {
                         goToRoutePlan();
                     }
-                }, 1000);
+                }, 1300);
                 break;
         }
     }
@@ -216,6 +219,8 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
     public String getTimestamp(){
 
         Calendar t = Calendar.getInstance();
-        return (t.get(Calendar.YEAR) + "" + t.get(Calendar.MONTH) + "" + t.get(Calendar.DAY_OF_MONTH) + "" + t.get(Calendar.HOUR_OF_DAY) + "" + t.get(Calendar.MINUTE) + "" + t.get(Calendar.SECOND) + "" + t.get(Calendar.MILLISECOND));
+        return (t.get(Calendar.YEAR) + "" + t.get(Calendar.MONTH) + "" + t.get(Calendar.DAY_OF_MONTH) + ""
+                + t.get(Calendar.HOUR_OF_DAY) + "" + t.get(Calendar.MINUTE) + "" + t.get(Calendar.SECOND) + ""
+                + t.get(Calendar.MILLISECOND) + "");
     }
 }

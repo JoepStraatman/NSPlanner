@@ -48,25 +48,18 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
 
     private String naam;
     private FirebaseAuth authTest;
-    private FirebaseAuth.AuthStateListener authListenerTest;
-    private static final String Tag = "Firebase_test";
     private DatabaseReference mDatabase;
-    private DatabaseReference onlangsdb;
-    private DatabaseReference favodb;
+    private RoutePlanAdapter adapter;
 
     private List<String> stationlijst = new ArrayList<>();
     private List<String> vertreklijst = new ArrayList<>();
-    private List<String> reistijdlijst = new ArrayList<>();
     private List<String> spoorlijst = new ArrayList<>();
 
-    private RoutePlanAdapter adapter;
     private ArrayList<String> ritnummerList = new ArrayList<>();
     private ArrayList<String> tijddatumList = new ArrayList<>();
     private ArrayList<String> naarList = new ArrayList<>();
     private ArrayList<String> vanList = new ArrayList<>();
-    private JSONArray ja_data = null;
-    private JSONArray filterOverstap;
-    private JSONArray overstappen;
+    private JSONArray ja_data, filterOverstap, overstappen = null;
     private CheckBox favo;
 
     @Override
@@ -193,6 +186,7 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
 
     private void getFromApiLoop(){
         for (int i = 0; i < ritnummerList.size(); i++){
+            Log.d("ritnummertje",ritnummerList.get(i));
             doRequestQueue(i);
         }
 
@@ -226,16 +220,17 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
     }
 
     private String getUrl(int i){
-        return "http://webservices.ns.nl/ns-api-treinplanner?fromStation="+vanList.get(i)+"&toStation="+naarList.get(i)+"&dateTime="+tijddatumList.get(i);
+        return "http://webservices.ns.nl/ns-api-treinplanner?fromStation="+vanList.get(i)+"&toStation="+
+                naarList.get(i)+"&dateTime="+tijddatumList.get(i);
     }
 
-    public void jsonparser(String response, final String ritnummer){ //Set the questions to the listview adapter  // load data from file
+    public void jsonparser(String response, final String ritnummer){
         String newResponse = printResponse(response);
         try {
             JSONObject newjsonObj = new JSONObject(newResponse);
             String reisString = newjsonObj.getString("ReisMogelijkheden");
             JSONObject reisObj = new JSONObject(reisString);
-            ja_data = reisObj.getJSONArray("ReisMogelijkheid"); // Get all the travel posibilities in a list
+            ja_data = reisObj.getJSONArray("ReisMogelijkheid");
             filterOverstappen();
             getRitnummer(ritnummer);
         } catch (JSONException e) {

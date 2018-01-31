@@ -24,26 +24,15 @@ public class RouteListAdapter extends ArrayAdapter<String> {
 
     private final Activity context;
     private final JSONObject data;
-    private final String[] stops;
-    private String vertrek;
-    private String vertrekVertraging;
-    private String aankomst;
-    private String aankomstVertraging;
-    private TextView vertrekTijd;
-    private TextView vertrekTijdVertraging;
-    private TextView station;
-    private TextView vertrekSpoor;
+    private String vertrek, vertrekVertraging, aankomst, aankomstVertraging;
+    private TextView vertrekTijd, vertrekTijdVertraging, station, vertrekSpoor;
     private JSONArray overstappen;
-    private String[] stopTijd;
-    private String[] Station;
-    private String[] Spoor;
-
+    private String[] stopTijd, Station, Spoor;
 
     RouteListAdapter(Activity Context, String[] Stops, JSONObject Data){
 
         super(Context, R.layout.list_layout_route, Stops);
         this.context = Context;
-        this.stops = Stops;
         this.data = Data;
         getData();
     }
@@ -107,17 +96,18 @@ public class RouteListAdapter extends ArrayAdapter<String> {
 
             vertrekTijd.setText(vertrek);
             checkVertragingVertrek();
-        } else if (position == overstappen.length()-1){
 
+        } else if (position == overstappen.length()-1){
             aankomst = stopTijd[position].substring(11,16);
             vertrekTijd.setText(aankomst);
             checkVertragingAankomst();
-        } else{
 
+        } else{
             vertrekTijd.setText(stopTijd[position].substring(11,16));
-            vertrekTijd.setTextSize(TypedValue.COMPLEX_UNIT_SP,11);
+            vertrekTijd.setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
             station.setTextSize(TypedValue.COMPLEX_UNIT_SP,11);
-            vertrekSpoor.setTextSize(TypedValue.COMPLEX_UNIT_SP,11);
+            vertrekSpoor.setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
+
         } station.setText(Station[position]);
     }
 

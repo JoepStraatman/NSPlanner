@@ -16,20 +16,9 @@ import android.widget.TextView;
 public class TijdListAdapter extends ArrayAdapter<String> {
 
     private final Activity context;
-    private final String[] begin;
-    private final String[] eind;
-    private final String[] reisT;
-    private final String[] vertrekV;
-    private final String[] aankomstV;
-    private final String[] reisV;
-    private final String[] statusR;
+    private final String[] begin, eind, reisT, vertrekV, aankomstV, reisV, statusR;
 
-    private TextView beginTijd;
-    private TextView eindTijd;
-    private TextView reisTijd;
-    private TextView beginVertragingTijd;
-    private TextView eindVertragingTijd;
-    private TextView reisVertragingTijd;
+    private TextView beginTijd, eindTijd, reisTijd, beginVertragingTijd, eindVertragingTijd, reisVertragingTijd;
     private ImageView statusView;
 
 

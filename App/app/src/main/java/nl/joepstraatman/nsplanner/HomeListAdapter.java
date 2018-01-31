@@ -36,5 +36,5 @@ public class HomeListAdapter extends ArrayAdapter<String> {
         TextView onlangs = rowView.findViewById(R.id.onlangstext);
         onlangs.setText(lijst.get(position));
         return rowView;
-    };
+    }
 }
