@@ -154,7 +154,7 @@ public class TijdActivity extends AppCompatActivity {
             JSONObject newjsonObj = new JSONObject(newResponse);
             String reisString = newjsonObj.getString("ReisMogelijkheden");
             JSONObject reisObj = new JSONObject(reisString);
-            ja_data = reisObj.getJSONArray("ReisMogelijkheid"); // Get all the travel posibilities in a list
+            ja_data = reisObj.getJSONArray("ReisMogelijkheid");
             filterOverstappen();
             getRitnummer();
         } catch (JSONException e) {
@@ -242,9 +242,11 @@ public class TijdActivity extends AppCompatActivity {
         for (int i = 0; i < filterOverstap.length(); i++) {
             try {
                 JSONObject jsonCheck = new JSONObject(filterOverstap.getString(i));
-                if(!jsonCheck.getString("GeplandeVertrekTijd").substring(11,16).equals((jsonCheck.getString("ActueleVertrekTijd").substring(11,16)))){
+                if(!jsonCheck.getString("GeplandeVertrekTijd").substring(11,16)
+                        .equals((jsonCheck.getString("ActueleVertrekTijd").substring(11,16)))){
                     vertrekVertraging[i] = (jsonCheck.getString("ActueleVertrekTijd").substring(11,16));
-                }if(!jsonCheck.getString("GeplandeAankomstTijd").substring(11,16).equals((jsonCheck.getString("ActueleAankomstTijd").substring(11,16)))){
+                }if(!jsonCheck.getString("GeplandeAankomstTijd").substring(11,16)
+                        .equals((jsonCheck.getString("ActueleAankomstTijd").substring(11,16)))){
                     aankomstVertraging[i] = (jsonCheck.getString("ActueleAankomstTijd").substring(11,16));
                 }if(!jsonCheck.getString("GeplandeReisTijd").equals((jsonCheck.getString("ActueleReisTijd")))){
                     reistijdVertraging[i] = (jsonCheck.getString("ActueleReisTijd"));
@@ -260,7 +262,8 @@ public class TijdActivity extends AppCompatActivity {
 
         if ( vertrek != null) {
 
-            TijdListAdapter adapter = new TijdListAdapter(this, vertrek, aankomst, reistijd, vertrekVertraging, aankomstVertraging, reistijdVertraging,statusReis);
+            TijdListAdapter adapter = new TijdListAdapter(this, vertrek, aankomst, reistijd,
+                    vertrekVertraging, aankomstVertraging, reistijdVertraging,statusReis);
             ListView list = findViewById(R.id.tijden);
             list.setAdapter(adapter);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {

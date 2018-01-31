@@ -62,7 +62,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    public void logout(){ //Go to the Main class. Called after login is complete.
+    //Go to the Main class. Called after login is complete.
+    public void logout(){
 
         authTest.signOut();
         Log.d("Signout", "onAuthStateChanged:signed_out2");

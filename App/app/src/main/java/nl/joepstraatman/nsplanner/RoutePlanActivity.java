@@ -100,7 +100,8 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         return super.onOptionsItemSelected(item);
     }
 
-    public void logout(){ //Go to the Main class. Called after login is complete.
+    //Go to the Main class. Called after login is complete.
+    public void logout(){
         authTest.signOut();
         Log.d("Signout", "onAuthStateChanged:signed_out2");
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);

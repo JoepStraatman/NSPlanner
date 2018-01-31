@@ -32,7 +32,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //getWindow().getDecorView().setBackgroundColor(Color.parseColor("#D6896A"));
         mAuth = FirebaseAuth.getInstance();
         final Button login = findViewById(R.id.login);
         final Button create = findViewById(R.id.create);
@@ -47,10 +46,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         TextView passwordv = findViewById(R.id.password);
         email = emailv.getText().toString();
         password = passwordv.getText().toString();
-        if (email.length() > 0 && password.length() > 0) { //If email or password input isnt empty.
-            if (v.getId() == R.id.login) { //When clicked login, do login.
+
+        //If email or password input isnt empty.
+        if (email.length() > 0 && password.length() > 0) {
+            if (v.getId() == R.id.login) {
                 logIn();
-            } else if (v.getId() == R.id.create) { //When clicked create, create account and login.
+            } else if (v.getId() == R.id.create) {
                 createUser();}
         } else {
             Toast.makeText(LoginActivity.this, "Email or password is empty.", Toast.LENGTH_LONG).show();}
@@ -72,7 +73,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public void createUser(){ //Create a user in firebase.
+    //Create a user in firebase.
+    public void createUser(){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -81,28 +83,38 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         if (!task.isSuccessful()) {
                             try {
                                 throw task.getException();
-                            }catch (FirebaseAuthUserCollisionException existEmail) {
+                            }
+                            // if user enters email that exists.
+                            catch (FirebaseAuthUserCollisionException existEmail) {
                                 Log.d("exist_email", "onComplete: exist_email");
                                 Toast.makeText(LoginActivity.this, email+ " already exists!",
-                                        Toast.LENGTH_SHORT).show();}// if user enters wrong email.
+                                        Toast.LENGTH_SHORT).show();}
+
+                            // if user enters wrong password.
                             catch (FirebaseAuthWeakPasswordException weakPassword) {
                                 Log.d("weak_password", "onComplete: weak_password");
-                                Toast.makeText(LoginActivity.this, "Weak password! Password needs to be at least 6 characters  long!",
-                                        Toast.LENGTH_LONG).show();}// if user enters wrong password.
+                                Toast.makeText(LoginActivity.this, "Weak password! " +
+                                                "Password needs to be at least 6 characters  long!",
+                                        Toast.LENGTH_LONG).show();}
+
+                            // if user enters email that is wrong
                             catch (FirebaseAuthInvalidCredentialsException malformedEmail) {
                                 Log.d("malformed_email", "onComplete: malformed_email");
                                 Toast.makeText(LoginActivity.this,  "Malformed email!",
                                         Toast.LENGTH_SHORT).show();
                             }  catch (Exception e) {
                                 Log.d("Error", "onComplete: " + e.getMessage());}
+
+                            //Log the user in after creating the account.
                         } else {
-                            logIn(); //Log the user in after creating the account.
+                            logIn();
                         }
                     }
                 });
     }
 
-    public void logIn(){ //LoginActivity the user into firebase
+    //LoginActivity the user into firebase
+    public void logIn(){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -121,14 +133,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
-    public void next(){ //Go to the Main class. Called after login is complete.
+    //Go to the Main class. Called after login is complete.
+    public void next(){
 
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
         finish();
     }
 
-    public void authlistener(){ //Check if the user is logged in.
+    //Check if the user is logged in.
+    public void authlistener(){
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override

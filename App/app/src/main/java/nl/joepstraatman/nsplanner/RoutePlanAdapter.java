@@ -73,8 +73,4 @@ public class RoutePlanAdapter extends ArrayAdapter<String> {
         hoofdspoorposition.add(pos);
     }
 
-    public int getStationMaxPosition(){
-
-        return Collections.max(hoofdspoorposition);
-    }
 }
