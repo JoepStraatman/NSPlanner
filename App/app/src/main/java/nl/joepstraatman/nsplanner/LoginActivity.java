@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseAuth.AuthStateListener mAuthListener;
     String email;
     String password;
-
+    TextView emailv, passwordv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mAuth = FirebaseAuth.getInstance();
         final Button login = findViewById(R.id.login);
         final Button create = findViewById(R.id.create);
+        emailv = findViewById(R.id.email);
+        passwordv = findViewById(R.id.password);
         login.setOnClickListener(this);
         create.setOnClickListener(this);
         authlistener();
@@ -42,19 +44,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public void onClick(View v) {
 
-        TextView emailv = findViewById(R.id.email);
-        TextView passwordv = findViewById(R.id.password);
         email = emailv.getText().toString();
         password = passwordv.getText().toString();
 
         //If email or password input isnt empty.
-        if (email.length() > 0 && password.length() > 0) {
-            if (v.getId() == R.id.login) {
-                logIn();
-            } else if (v.getId() == R.id.create) {
-                createUser();}
-        } else {
-            Toast.makeText(LoginActivity.this, "Email or password is empty.", Toast.LENGTH_LONG).show();}
+        switch (v.getId()){
+            case R.id.login:
+                if (email.length() > 0 && password.length() > 0) {
+                    logIn();
+                } else{
+                    Toast.makeText(LoginActivity.this, "Email or password is empty.", Toast.LENGTH_LONG).show();
+                }
+            case R.id.create:
+                if (email.length() > 0 && password.length() > 0) {
+                    createUser();
+                } else{
+                    Toast.makeText(LoginActivity.this, "Email or password is empty.", Toast.LENGTH_LONG).show();
+                }
+        }
     }
 
     @Override
