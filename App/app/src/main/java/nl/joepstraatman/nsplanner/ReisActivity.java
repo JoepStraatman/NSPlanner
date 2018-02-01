@@ -35,9 +35,14 @@ import org.json.XML;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
+/**
+ * De activiteit waar de reis of overstap gepland kan worden.
+ */
 
 public class ReisActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
@@ -51,7 +56,6 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
     private String url = "http://webservices.ns.nl/ns-api-stations-v2?_ga=2.101005377.1354008381.1516190474-680113843.1477057522";
     private int day, month, year, hour, minute;
     private int dayfinal, monthfinal, yearfinal, hourfinal, minutefinal;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +78,12 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
 
         getCurrentTime();
         getCurrentDate();
-        openCategory();
+        doeVolleyRequest();
     }
+
+    /**
+     * Maak de logout button rechts boven in de titelbalk.
+     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,6 +91,10 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+    /**
+     * Zorgt ervoor dat de gebruiker wordt uitgelogd als er op de button geklikt wordt.
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -93,7 +105,10 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    //Go to the Main class. Called after login is complete.
+    /**
+     *  De logout functie die de status van de user veranderd, en door gaat naar de LoginActivity.
+     */
+
     public void logout(){
 
         authTest.signOut();
@@ -103,53 +118,109 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
+    /**
+     *  Als de terugknop in android zelf wordt ingedrukt, ga dan terug naar de HomeActivity.
+     */
+
     @Override
     public void onBackPressed() {
 
-        startActivity(new Intent(this, HomeActivity.class));finish();
+        startActivity(new Intent(this, HomeActivity.class));
+        finish();
         super.onBackPressed();
     }
+
+    /**
+     *  De onclick listener van de buttons.
+     */
 
     public void onClick(View v) {
 
         switch (v.getId()) {
 
             case (R.id.zoek):
-                if (naam.getText().toString().equals("") || station1.getText().toString().equals("")
-                        || station2.getText().toString().equals("")) {
-                    Toast.makeText(this, "Er mist een veld!", Toast.LENGTH_SHORT).show();
-                } else {
-                    goToTijd();
-                } break;
+                caseZoek();
+                break;
 
             case (R.id.soort):
-                if (soort.getText().equals("Vertrek: ")){
-                    soort.setText("Aankomst:");
-                }
-                else {
-                    soort.setText("Vertrek: ");
-                }
+                caseSoort();
                 break;
 
             case (R.id.datum):
-                Calendar c = Calendar.getInstance();
-                year = c.get(Calendar.YEAR);
-                month = c.get(Calendar.MONTH);
-                day = c.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog dateD = new DatePickerDialog(this, this, year, month, day);
-                dateD.show();
+                caseDatum();
                 break;
 
             case (R.id.tijd):
-                Calendar t = Calendar.getInstance();
-                hour = t.get(Calendar.HOUR_OF_DAY);
-                minute = t.get(Calendar.MINUTE);
-
-                TimePickerDialog timeD = new TimePickerDialog(this, this, hour, minute, true);
-                timeD.show();
+                caseTijd();
+                break;
         }
     }
+
+    /**
+     *  Zoek button event.
+     */
+
+    private void caseZoek(){
+
+        if (naam.getText().toString().equals("") || station1.getText().toString().equals("")
+                || station2.getText().toString().equals("")) {
+            Toast.makeText(this, "Er mist een veld!", Toast.LENGTH_SHORT).show();
+        } else if (!Arrays.asList(countryNameList).contains(station1.getText().toString()) ||
+                !Arrays.asList(countryNameList).contains(station2.getText().toString())){
+            Toast.makeText(this, "Dit is geen geldig station", Toast.LENGTH_SHORT).show();
+        }
+
+        else {
+            goToTijd();
+        }
+    }
+
+    /**
+     *  Vertrek/aankomst button event.
+     */
+
+    private void caseSoort(){
+
+        if (soort.getText().equals("Vertrek: ")){
+            soort.setText("Aankomst:");
+        }
+        else {
+            soort.setText("Vertrek: ");
+        }
+    }
+
+    /**
+     *  Datum button event.
+     */
+
+    private void caseDatum(){
+
+        Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog dateD = new DatePickerDialog(this, this, year, month, day);
+        dateD.show();
+    }
+
+    /**
+     *  Tijd button event.
+     */
+
+    private void caseTijd(){
+
+        Calendar t = Calendar.getInstance();
+        hour = t.get(Calendar.HOUR_OF_DAY);
+        minute = t.get(Calendar.MINUTE);
+
+        TimePickerDialog timeD = new TimePickerDialog(this, this, hour, minute, true);
+        timeD.show();
+    }
+
+    /**
+     *  Functie waar intent worden ingeladen en gebruikt om bijvoorbeeld de overstap te checken.
+     */
 
     public void laadDataIn(){
 
@@ -168,6 +239,10 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     *  Ga naar de TijdActivity en stuur de intents mee.
+     */
+
     public void goToTijd(){
 
         Intent i = new Intent(this, TijdActivity.class);
@@ -183,6 +258,11 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
+    /**
+     *  Haal de huidige tijd op uit het androidsysteem.
+     *  Zet de tijdbutton naar die tijd.
+     */
+
     public void getCurrentTime(){
 
         Calendar c = Calendar.getInstance();
@@ -196,6 +276,11 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     *  Haal de huidige datum op uit het androidsysteem.
+     *  Zet de datumbutton naar die datum.
+     */
+
     public void getCurrentDate(){
 
         Calendar c = Calendar.getInstance();
@@ -205,11 +290,19 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         datum.setText(dayfinal + "-" + monthfinal + "-" + yearfinal);
     }
 
+    /**
+     *  Creeer datum/tijd code zoals die in de NS API gebruikt moet worden.
+     */
+
     public String sendTimeDate(){
         String dat = yearfinal + "-" + monthfinal + "-" + dayfinal;
         String tijd = hourfinal + ":" + minutefinal;
         return dat + "T" + tijd;
     }
+
+    /**
+     *  Set views voor begin en eindstation.
+     */
 
     public void makeviews(){
 
@@ -217,8 +310,11 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         station2 = findViewById(R.id.station2);
     }
 
-    //Create a new volley request to the api.
-    public void openCategory() {
+    /**
+     *  Doe een volley GET request.
+     */
+
+    public void doeVolleyRequest() {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -233,23 +329,32 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
                 System.out.println(error);}
         }){
 
-        @Override
-        public Map<String, String> getHeaders() throws AuthFailureError {
+            // Login op de API.
 
-            HashMap<String, String> params = new HashMap<String, String>();
-            params.put("Content-Type", "application/json");
-            String creds = String.format("%s:%s","straatmanjoep@gmail.com","bnjf-LP20gR1WNnYeZ2RYyDvYItt-PtN2Go1ulSipoWfrY42SIuhHA");
-            String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.NO_WRAP);
-            params.put("Authorization", auth);
-            return params;}
-        };
-        // Add the request to the RequestQueue.
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                String creds = String.format("%s:%s","straatmanjoep@gmail.com","bnjf-LP20gR1WNnYeZ2RYyDvYItt-PtN2Go1ulSipoWfrY42SIuhHA");
+                String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.NO_WRAP);
+                params.put("Authorization", auth);
+                return params;}
+            };
+
+        // Stuur de GET request naar de wachtlijst.
+
         queue.add(stringRequest);
     }
+
+    /**
+     *  Parse de json data en haal de benodigde dat eruit.
+     */
 
     public void jsonparser(String response){
 
         String newResponse = printResponse(response);
+
         try {
             JSONObject newjsonObj = new JSONObject(newResponse);
             String reisString = newjsonObj.getString("Stations");
@@ -260,7 +365,10 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         }getData();
     }
 
-    // parse the xml response to json
+    /**
+     *  Converteer de XML response van de API naar JSON.
+     */
+
     public String printResponse(String response) {
 
         JSONObject jsonObj = null;
@@ -273,6 +381,10 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         }
         return jsonObj.toString();
     }
+
+    /**
+     *  Haal alle stationsnamen uit de response en zet ze in een lijst.
+     */
 
     public void getData(){
 
@@ -289,6 +401,10 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         setAutoAdapter();
     }
 
+    /**
+     *  Open de adapter die automatisch de 2 editteksten aanvult met stationsnamen.
+     */
+
     public void setAutoAdapter(){
 
         if (countryNameList != null){
@@ -304,6 +420,11 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     *  Als de datum popup wordt geopend, sla het op in variabelen.
+     *  Zet de buttontext naar de gekozen datum.
+     */
+
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
         yearfinal = i;
@@ -311,6 +432,11 @@ public class ReisActivity extends AppCompatActivity implements View.OnClickListe
         dayfinal = i2;
         datum.setText(dayfinal + "-" + monthfinal + "-" + yearfinal);
     }
+
+    /**
+     *  Als de tijd popup wordt geopend, sla het op in variabelen.
+     *  Zet de buttontext naar de gekozen tijd.
+     */
 
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {

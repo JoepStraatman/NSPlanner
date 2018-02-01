@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 
 /**
- * Created by Gebruiker on 23-1-2018.
+ * De adapter voor de FavorietenActivity om de verschillende favorieten weer te geven.
  */
 
 public class FavorietenListAdapter extends ArrayAdapter<String> {

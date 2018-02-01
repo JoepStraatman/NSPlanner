@@ -45,6 +45,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *  De activiteit waar de opgeslagen route geladen wordt.
+ */
+
 public class RoutePlanActivity extends AppCompatActivity implements View.OnClickListener{
 
     private String naam;
@@ -81,6 +85,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         openAdapter();
     }
 
+    /**
+     *  Als de terugknop in android zelf wordt ingedrukt, ga dan terug naar de HomeActivity.
+     */
+
     @Override
     public void onBackPressed() {
 
@@ -89,12 +97,20 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         super.onBackPressed();
     }
 
+    /**
+     * Maak de logout button rechts boven in de titelbalk.
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+    /**
+     * Zorgt ervoor dat de gebruiker wordt uitgelogd als er op de button geklikt wordt.
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -105,7 +121,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         return super.onOptionsItemSelected(item);
     }
 
-    //Go to the Main class. Called after login is complete.
+    /**
+     *  De logout functie die de status van de user veranderd, en door gaat naar de LoginActivity.
+     */
+
     public void logout(){
 
         authTest.signOut();
@@ -115,9 +134,14 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         finish();
     }
 
+    /**
+     *  De onclick listener van de buttons.
+     */
+
     public void onClick(View v) {
 
         switch (v.getId()) {
+
             case (R.id.voegToe):
                 Intent i = new Intent(this, ReisActivity.class);
                 i.putExtra("name", naam);
@@ -137,6 +161,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    /**
+     *  Functie waar intent worden ingeladen en gebruikt om bijvoorbeeld de overstap te checken.
+     */
+
     public void laadDataIn(){
 
         Bundle extras = getIntent().getExtras();
@@ -144,6 +172,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         TextView titelnaam = findViewById(R.id.titelnaam);
         titelnaam.setText(naam);
     }
+
+    /**
+     *  Haal data uit firebase en zet het in de adapter.
+     */
 
     public void getRouteFromFirebase(){
 
@@ -174,6 +206,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+    /**
+     *  Sla de data op die uit firebase is gehaald in variabelen.
+     */
+
     private void saveFirebasedata(RouteData routeData){
 
         if (!ritnummerList.contains(routeData.Ritnummer)) {
@@ -184,6 +220,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    /**
+     *  Open de adapter voor de listview.
+     */
+
     public void openAdapter(){
 
         adapter = new RoutePlanAdapter(this,stationlijst, vertreklijst, spoorlijst, vertragingList);
@@ -191,10 +231,18 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         list.setAdapter(adapter);
     }
 
+    /**
+     *  Laat de adapter weten dat er overstappen zijn toegevoegd, om te refreshen
+     */
+
     private void addToList() {
 
         adapter.notifyDataSetChanged();
     }
+
+    /**
+     *    Loop over de overstappen en stuur ze naar volley.
+     */
 
     private void getFromApiLoop(){
 
@@ -209,10 +257,14 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
                 public void run() {
                     doRequestQueue(finalI);
                 }
-            }, 500);
+            }, 1000);
         }
 
     }
+
+    /**
+     *  Doe een volley GET request.
+     */
 
     private void doRequestQueue(final int i){
 
@@ -227,8 +279,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println(error);}
-        })
-        {
+        }){
+
+            // Login op de API.
+
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> params = new HashMap<String, String>();
@@ -239,16 +293,24 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
                 return params;}
             };
 
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+        // Stuur de GET request naar de wachtlijst.
 
+        queue.add(stringRequest);
     }
+
+    /**
+     *  Maak een API URL uit de verschillende opgehaalde data.
+     */
 
     private String getUrl(int i){
 
         return "http://webservices.ns.nl/ns-api-treinplanner?fromStation="+vanList.get(i)+"&toStation="+
                 naarList.get(i)+"&dateTime="+tijddatumList.get(i);
     }
+
+    /**
+     *  Parse de json data en haal de benodigde dat eruit.
+     */
 
     public void jsonparser(String response, final String ritnummer){
 
@@ -266,6 +328,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    /**
+     *  Converteer de XML response van de API naar JSON.
+     */
+
     public String printResponse(String response) {
 
         JSONObject jsonObj = null;
@@ -277,6 +343,11 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         }
         return jsonObj.toString();
     }
+
+    /**
+     *  Filter de binnengehaalde routes op het hebben van geen overstappen.
+     *  Stop de routes zonder overstap in een nieuwe lijst.
+     */
 
     public void filterOverstappen(){
 
@@ -291,6 +362,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         }
         Log.d("filteroverstapplan", filterOverstap.toString());
     }
+
+    /**
+     *  Haal de ritnummers uit de data.
+     */
 
     public void getRitnummer(String ritnummer){
 
@@ -310,6 +385,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    /**
+     *  Voor elke overstap ga de data ophalen.
+     */
+
     private void giveToAdapter(String stringObj){
 
         try {
@@ -324,6 +403,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
             getItemsFromObject(i);
         }
     }
+
+    /**
+     *  Haal de data uit de overstap en sla ze op in variabelen.
+     */
 
     private void getItemsFromObject(int i){
 
@@ -346,6 +429,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    /**
+     *  Check of een route vertraging heeft en sla die op.
+     */
+
     private void getVertraging(int i){
 
         try {
@@ -359,6 +446,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
             e.printStackTrace();
         }
     }
+
+    /**
+     *  Maak connectie met Firebase en sla koppieer de route naar de favorieten.
+     */
 
     private void saveToFavorieten(){
 
@@ -378,6 +469,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
             }
         });
     }
+
+    /**
+     *  Haal de opgeslagen route weg uit de favorieten.
+     */
 
     private void removeFromFavorieten(){
 

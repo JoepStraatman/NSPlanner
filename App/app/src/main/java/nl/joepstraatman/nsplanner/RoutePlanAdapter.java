@@ -51,11 +51,16 @@ public class RoutePlanAdapter extends ArrayAdapter<String> {
         @SuppressLint("ViewHolder") View rowView=inflater.inflate(R.layout.list_layout_route, null,true);
         getTextviews(rowView, position);
 
+        // Als het een begin of eindpunt is, laat het spoor zien.
+
         if (!spoorlijst.get(position).equals("")){
             vertrekSpoor.setText("Spoor: " + spoorlijst.get(position));
         } else {
             vertrekSpoor.setVisibility(View.INVISIBLE);
         }
+
+        // Als het station een tussenstop is.
+
         if (!containsInt(hoofdspoorposition, position)){
             vertrekTijd.setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
             vertrekStation.setTextSize(TypedValue.COMPLEX_UNIT_SP,11);
@@ -67,6 +72,10 @@ public class RoutePlanAdapter extends ArrayAdapter<String> {
         return rowView;
     }
 
+    /**
+     *  Initialiseer textviews.
+     */
+
     private void getTextviews(View rowView, int position){
 
         vertrekStation = rowView.findViewById(R.id.vertrekStation);
@@ -77,6 +86,10 @@ public class RoutePlanAdapter extends ArrayAdapter<String> {
         vertrekTijd.setText(vertreklijst.get(position));
     }
 
+    /**
+     *  Check of er vertraging is in de route, zoja laat die zien.
+     */
+
     private void checkvertraging(int position){
 
         if (!vertreklijst.get(position).equals(vertraginglijst.get(position))){
@@ -85,10 +98,18 @@ public class RoutePlanAdapter extends ArrayAdapter<String> {
         }
     }
 
+    /**
+     *  Check of een station een begin/eind station is.
+     */
+
     public boolean containsInt(final List<Integer> array, final int key) {
 
         return array.contains(key);
     }
+
+    /**
+     *  Add een begin/eindstation posititie aan de lijst.
+     */
 
     public void addStationPosition(int pos){
 

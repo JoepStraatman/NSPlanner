@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Created by Gebruiker on 23-1-2018.
+ *  De adapter voor de HomeActivity om de verschillende recente reizen weer te geven.
  */
 
 public class HomeListAdapter extends ArrayAdapter<String> {

@@ -30,6 +30,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * De activiteit waarin de tijden van de mogelijke reizen worden weergegeven.
+ */
+
 public class TijdActivity extends AppCompatActivity {
 
     private String naam, van, naar, soort, tijd;
@@ -49,8 +53,12 @@ public class TijdActivity extends AppCompatActivity {
         authTest = FirebaseAuth.getInstance();
         laadDataIn();
         createUrl();
-        openCategory();
+        doeVolleyRequest();
     }
+
+    /**
+     * Maak de logout button rechts boven in de titelbalk.
+     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,6 +67,10 @@ public class TijdActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+
+    /**
+     * Zorgt ervoor dat de gebruiker wordt uitgelogd als er op de button geklikt wordt.
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -69,7 +81,10 @@ public class TijdActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Go to the Main class. Called after login is complete.
+    /**
+     *  De logout functie die de status van de user veranderd, en door gaat naar de LoginActivity.
+     */
+
     public void logout(){
 
         authTest.signOut();
@@ -79,29 +94,47 @@ public class TijdActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     *  Als de terugknop in android zelf wordt ingedrukt, ga dan terug naar de ReisActivity.
+     */
+
     @Override
     public void onBackPressed() {
         startActivity(new Intent(this, ReisActivity.class));finish();
         super.onBackPressed();
     }
 
+    /**
+     *  Functie waar intent worden ingeladen en gebruikt om variabelen te veranderen.
+     */
+
     public void laadDataIn(){
 
         Bundle extras = getIntent().getExtras();
         Intent extra = getIntent();
+
         if ( extras.getString("van") != null){
-            naam = extras.getString("name");}
+            naam = extras.getString("name");
+        }
         soort = extras.getString("departure");
         van = extras.getString("van");
         naar = extras.getString("naar");
+
         TextView station1 = findViewById(R.id.van);
         TextView station2 = findViewById(R.id.naar);
         station1.setText(van.toString());
         station2.setText(naar.toString());
+
         tijd = extras.getString("tijd");
+
         if ( extra.hasExtra("overstap")) {
-            overstap = extras.getBoolean("overstap"); }
+            overstap = extras.getBoolean("overstap");
+        }
     }
+
+    /**
+     *  Maak een API URL uit de verschillende opgehaalde data.
+     */
 
     public void createUrl(){
 
@@ -118,33 +151,46 @@ public class TijdActivity extends AppCompatActivity {
                 + naarCode + "&dateTime=" + tijd + "&departure=" + departure;
     }
 
-    //Create a new volley request to the api.
-    public void openCategory() {
+    /**
+     *  Doe een volley GET request.
+     */
+
+    public void doeVolleyRequest() {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+
             @Override
             public void onResponse(String response) {
                 jsonparser(response);
             }}, new com.android.volley.Response.ErrorListener() {
+
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println(error);}
-        })
+        }) {
 
-        {@Override
-        public Map<String, String> getHeaders() throws AuthFailureError {
+            // Login op de API.
 
-            HashMap<String, String> params = new HashMap<String, String>();
-            params.put("Content-Type", "application/json");
-            String creds = String.format("%s:%s","straatmanjoep@gmail.com","bnjf-LP20gR1WNnYeZ2RYyDvYItt-PtN2Go1ulSipoWfrY42SIuhHA");
-            String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.NO_WRAP);
-            params.put("Authorization", auth);
-            return params;}
-        };
-        // Add the request to the RequestQueue.
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                String creds = String.format("%s:%s","straatmanjoep@gmail.com","bnjf-LP20gR1WNnYeZ2RYyDvYItt-PtN2Go1ulSipoWfrY42SIuhHA");
+                String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.NO_WRAP);
+                params.put("Authorization", auth);
+                return params;}
+            };
+
+        // Stuur de GET request naar de wachtlijst.
+
         queue.add(stringRequest);
     }
+
+    /**
+     *  Parse de json data en haal de benodigde dat eruit.
+     */
 
     public void jsonparser(String response){
 
@@ -162,6 +208,10 @@ public class TijdActivity extends AppCompatActivity {
         }getData();
     }
 
+    /**
+     *  Haal de ritnummers uit de data.
+     */
+
     public void getRitnummer(){
 
         ritNummer = new String[filterOverstap.length()];
@@ -174,6 +224,11 @@ public class TijdActivity extends AppCompatActivity {
          catch (JSONException e) { throw new RuntimeException(e);}
         }
     }
+
+    /**
+     *  Filter de binnengehaalde routes op het hebben van geen overstappen.
+     *  Stop de routes zonder overstap in een nieuwe lijst.
+     */
 
     public void filterOverstappen(){
 
@@ -191,7 +246,10 @@ public class TijdActivity extends AppCompatActivity {
         Log.d("filteroverstap", filterOverstap.toString());
     }
 
-    // parse the xml response to json
+    /**
+     *  Converteer de XML response van de API naar JSON.
+     */
+
     public String printResponse(String response) {
 
         JSONObject jsonObj = null;
@@ -203,6 +261,10 @@ public class TijdActivity extends AppCompatActivity {
         }
         return jsonObj.toString();
     }
+
+    /**
+     *  Haal de benodigde route informatie uit de gefilterde routes.
+     */
 
     public void getData(){
 
@@ -225,6 +287,10 @@ public class TijdActivity extends AppCompatActivity {
         }openAdapter();
     }
 
+    /**
+     *  Initialiseer de stringarays die nodig zijn voor de adapter.
+     */
+
     public void setStringArrays(){
 
         vertrek = new String[filterOverstap.length()];
@@ -236,6 +302,10 @@ public class TijdActivity extends AppCompatActivity {
         statusReis = new String[filterOverstap.length()];
         arrayList = new String[filterOverstap.length()];
     }
+
+    /**
+     *  Check of een route vertraging heeft en sla die op.
+     */
 
     public void checkVertraging(){
 
@@ -258,6 +328,11 @@ public class TijdActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *  Open de adapter voor de listview.
+     *  Geef alle benodigde route informatie mee aan de adapter.
+     */
+
     public void openAdapter(){
 
         if ( vertrek != null) {
@@ -276,22 +351,37 @@ public class TijdActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *  Ga naar de RouteActivity.
+     */
+
     public void goToRoute(int pos){
 
         Intent i = new Intent(this, RouteActivity.class);
+
+        startActivity(putExtraIntent(i, pos));
+        finish();
+    }
+
+    /**
+     *  Geef data aan intent mee.
+     */
+
+    private Intent putExtraIntent(Intent i, int pos){
+
         i.putExtra("name", naam);
         i.putExtra("van", van);
         i.putExtra("naar", naar);
         i.putExtra("tijd", tijd);
         i.putExtra("data", arrayList[pos]);
         i.putExtra("ritnummer", ritNummer[pos]);
-        if (statusReis[pos].equals("NIET-MOGELIJK") || statusReis[pos].equals("GEANNULEERD") || statusReis[pos].equals("OVERSTAP-NIET-MOGELIJK")){
+        if (statusReis[pos].equals("NIET-MOGELIJK") || statusReis[pos].equals("GEANNULEERD") ||
+                statusReis[pos].equals("OVERSTAP-NIET-MOGELIJK")){
             i.putExtra("status", statusReis[pos]);
         }
         if (overstap != null) {
             i.putExtra("overstap", overstap);
         }
-        startActivity(i);
-        finish();
+        return i;
     }
 }

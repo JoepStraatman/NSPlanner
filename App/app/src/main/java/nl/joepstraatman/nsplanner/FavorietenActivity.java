@@ -21,6 +21,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * De activiteit waar de favorieten worden opgehaald en worden laten zien.
+ */
+
 public class FavorietenActivity extends AppCompatActivity {
 
     private FirebaseAuth authTest;
@@ -40,6 +44,10 @@ public class FavorietenActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Maak de logout button rechts boven in de titelbalk.
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -47,6 +55,10 @@ public class FavorietenActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+
+    /**
+     * Zorgt ervoor dat de gebruiker wordt uitgelogd als er op de button geklikt wordt.
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -57,7 +69,10 @@ public class FavorietenActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Go to the Main class. Called after login is complete.
+    /**
+     *  De logout functie die de status van de user veranderd, en door gaat naar de LoginActivity.
+     */
+
     public void logout(){
 
         authTest.signOut();
@@ -67,12 +82,20 @@ public class FavorietenActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     *  Als de terugknop in android zelf wordt ingedrukt.
+     */
+
     @Override
     public void onBackPressed() {
 
         startActivity(new Intent(this, HomeActivity.class));finish();
         super.onBackPressed();
     }
+
+    /**
+     *  Open de adapter voor de listview.
+     */
 
     public void openAdapter(){
 
@@ -88,6 +111,10 @@ public class FavorietenActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     *  Ga naar de RouteActivity.
+     */
+
     public void goToRoute(int pos){
 
         Intent i = new Intent(this, RoutePlanActivity.class);
@@ -95,6 +122,10 @@ public class FavorietenActivity extends AppCompatActivity {
         startActivity(i);
         finish();
     }
+
+    /**
+     *  Haal data uit firebase en zet het in de adapter.
+     */
 
     public void getRouteFromFirebase(){
 

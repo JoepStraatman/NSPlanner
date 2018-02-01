@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * Created by Gebruiker on 17-1-2018.
+ * De adapter voor de TijdActivity om de verschillende reizentijden weer te geven.
  */
 
 public class TijdListAdapter extends ArrayAdapter<String> {
@@ -22,7 +22,8 @@ public class TijdListAdapter extends ArrayAdapter<String> {
     private ImageView statusView;
 
 
-    public TijdListAdapter(Activity context, String[] Begin, String[] Eind, String[] ReisT, String[] VertrekV, String[] AankomstV, String[] ReisV, String[] StatusR) {
+    public TijdListAdapter(Activity context, String[] Begin, String[] Eind, String[] ReisT,
+                           String[] VertrekV, String[] AankomstV, String[] ReisV, String[] StatusR) {
 
         super(context, R.layout.list_layout_tijd,Begin);
         this.context=context;
@@ -46,20 +47,32 @@ public class TijdListAdapter extends ArrayAdapter<String> {
         eindTijd.setText(eind[position]);
         reisTijd.setText("Reistijd: " + reisT[position]);
 
+        // Check op vertragingen, zoja laat die zien en streep de geplande tijd door. ( *3 )
+
         if (vertrekV[position]!= null){
             beginVertragingTijd.setText(vertrekV[position]);
             beginTijd.setPaintFlags(beginTijd.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
         }if (aankomstV[position]!= null){
             eindVertragingTijd.setText(aankomstV[position]);
             eindTijd.setPaintFlags(eindTijd.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
         }if (reisV[position]!= null){
             reisVertragingTijd.setText(reisV[position]);
             reisTijd.setPaintFlags(reisTijd.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        }if (statusR[position].equals("NIET-MOGELIJK") || statusR[position].equals("GEANNULEERD") || statusR[position].equals("OVERSTAP-NIET-MOGELIJK")){
+
+        // Check of de route wel mogelijk is. Zo niet Weergeef waarom niet.
+
+        }if (statusR[position].equals("NIET-MOGELIJK") || statusR[position].equals("GEANNULEERD") ||
+                statusR[position].equals("OVERSTAP-NIET-MOGELIJK")){
             statusView.setVisibility(View.VISIBLE);
         }
         return rowView;
     }
+
+    /**
+     *  Initialiseer alle views.
+     */
 
     private void findViews(View rowView){
 

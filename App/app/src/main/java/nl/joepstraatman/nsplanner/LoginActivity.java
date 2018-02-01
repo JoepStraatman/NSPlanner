@@ -19,6 +19,10 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * De activiteit waar een gebruiker zichzelf kan registeren of inloggen voor de app.
+ */
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseAuth mAuth;
@@ -42,12 +46,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         authlistener();
     }
 
+    /**
+     *  De onclick listener voor de buttons.
+     */
+
     public void onClick(View v) {
 
         email = emailv.getText().toString();
         password = passwordv.getText().toString();
 
-        //If email or password input isnt empty.
+        // Als de email of het wachtwoord niet is ingevuld.
+
         switch (v.getId()){
             case R.id.login:
                 if (email.length() > 0 && password.length() > 0) {
@@ -63,6 +72,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
         }
     }
+
+    /**
+     *  De user listeners voor Firebase.
+     */
 
     @Override
     public void onStart() {
@@ -80,7 +93,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    //Create a user in firebase.
+    /**
+     *  Functie die een user aanmaakt in firebase.
+     */
+
     public void createUser(){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -91,28 +107,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             try {
                                 throw task.getException();
                             }
-                            // if user enters email that exists.
+
+                            // Als een user een email invult die al in gebruik is.
                             catch (FirebaseAuthUserCollisionException existEmail) {
                                 Log.d("exist_email", "onComplete: exist_email");
                                 Toast.makeText(LoginActivity.this, email+ " already exists!",
                                         Toast.LENGTH_SHORT).show();}
 
-                            // if user enters wrong password.
+                            // Als de user het verkeerde wachtwoord invult.
                             catch (FirebaseAuthWeakPasswordException weakPassword) {
                                 Log.d("weak_password", "onComplete: weak_password");
                                 Toast.makeText(LoginActivity.this, "Weak password! " +
                                                 "Password needs to be at least 6 characters  long!",
                                         Toast.LENGTH_LONG).show();}
 
-                            // if user enters email that is wrong
+                            // Als de user een verkeerde email invult.
                             catch (FirebaseAuthInvalidCredentialsException malformedEmail) {
                                 Log.d("malformed_email", "onComplete: malformed_email");
                                 Toast.makeText(LoginActivity.this,  "Malformed email!",
                                         Toast.LENGTH_SHORT).show();
+
                             }  catch (Exception e) {
                                 Log.d("Error", "onComplete: " + e.getMessage());}
 
-                            //Log the user in after creating the account.
+                        // Log de user in als het is gelukt.
                         } else {
                             logIn();
                         }
@@ -120,19 +138,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
-    //LoginActivity the user into firebase
+    /**
+     *  Log de user in bij Firebase.
+     */
+
     public void logIn(){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
-                        // Sign in success, update UI with the signed-in user's information
+                        // Als het inloggen gelukt is.
                         if (task.isSuccessful()) {
                             Log.d("sign in succesfully", "signInWithEmail:success");
                             Toast.makeText(LoginActivity.this, "User " +email+ " signed in!",Toast.LENGTH_SHORT).show();
                         }
-                        // If sign in fails, display a message to the user.
+
+                        // Als het inloggen mislukt.
                         else {
                             Log.w("Failed to login", "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",Toast.LENGTH_SHORT).show();}
@@ -140,7 +162,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
-    //Go to the Main class. Called after login is complete.
+    /**
+     *  Ga naar de HomeActivity.
+     */
+
     public void next(){
 
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
@@ -148,7 +173,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         finish();
     }
 
-    //Check if the user is logged in.
+    /**
+     *  Listener voor of de user login status.
+     */
+
     public void authlistener(){
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {

@@ -28,6 +28,10 @@ import org.json.JSONObject;
 
 import java.util.Calendar;
 
+/**
+ * De activiteit waarin de gekozen route wordt weergegeven.
+ */
+
 public class RouteActivity extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseAuth authTest;
@@ -52,12 +56,20 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         voegtoe.setOnClickListener(this);
     }
 
+    /**
+     * Maak de logout button rechts boven in de titelbalk.
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+    /**
+     * Zorgt ervoor dat de gebruiker wordt uitgelogd als er op de button geklikt wordt.
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -68,13 +80,20 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     *  Als de terugknop in android zelf wordt ingedrukt, ga dan terug naar de ReisActivity.
+     */
+
     @Override
     public void onBackPressed() {
         startActivity(new Intent(this, ReisActivity.class));finish();
         super.onBackPressed();
     }
 
-    //Go to the Main class. Called after login is complete.
+    /**
+     *  De logout functie die de status van de user veranderd, en door gaat naar de LoginActivity.
+     */
+
     public void logout(){
 
         authTest.signOut();
@@ -83,6 +102,10 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         startActivity(intent);
         finish();
     }
+
+    /**
+     *  De onclick listener van de buttons.
+     */
 
     public void onClick(View v) {
 
@@ -101,6 +124,10 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     *  Functie waar intent worden ingeladen en gebruikt om bijvoorbeeld de overstap te checken.
+     */
+
     public void laadDataIn(){
 
         Bundle extras = getIntent().getExtras();
@@ -118,6 +145,10 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         setTextViews();
     }
 
+    /**
+     *  Check of dit een overstap is en of het een route is die niet mogelijk is.
+     */
+
     private void checkIfOverstapAndVertraging(Bundle extras){
 
         Intent extra = getIntent();
@@ -132,6 +163,11 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
             fout.setText(status);
         }
     }
+
+    /**
+     *  Initialiseer de textviews.
+     *  Check voor v ertraging van de reistijd, zo ja laat het zien.
+     */
 
     public void setTextViews(){
 
@@ -155,6 +191,11 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     *  Open de adapter voor de listview.
+     *  Geef alle benodigde route informatie mee aan de adapter.
+     */
+
     public void openAdapter(){
 
         JSONArray overstappen = null;
@@ -171,6 +212,10 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         ListView list = findViewById(R.id.routeList);
         list.setAdapter(adapter);
     }
+
+    /**
+     *  Maak connectie met Firebase, stuur userUID door naar Send method.
+     */
 
     public void dataToFirebase(){
 
@@ -190,6 +235,10 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
+    /**
+     *  Stuur de data van een route door naar Firebase, om hem zo op te slaan.
+     */
+
     public void send(final String uid){
 
         if (overstap == null) {
@@ -203,6 +252,10 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         mDatabase.child("Onlangs").child(uid).child(naam).child(currenttimestamp).child("Naar").setValue(getCode(naar));
     }
 
+    /**
+     *  Ga naar de RoutePlanActivity.
+     */
+
     public void goToRoutePlan(){
 
         Intent i = new Intent(this, RoutePlanActivity.class);
@@ -211,10 +264,18 @@ public class RouteActivity extends AppCompatActivity implements View.OnClickList
         finish();
     }
 
+    /**
+     *  Haal de code van een  station uit de opgeslagen totaalnaam.
+     */
+
     public String getCode(String geheel){
 
         return geheel.substring(geheel.indexOf("(") + 1, geheel.indexOf(")"));
     }
+
+    /**
+     *  Sla de huidige tijd op van jaar tot miliseconde, om zo te route goed op te slaan in Firebase.
+     */
 
     public String getTimestamp(){
 

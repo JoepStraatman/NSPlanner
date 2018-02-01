@@ -17,7 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by Gebruiker on 19-1-2018.
+ *  De adapter voor de RouteActivity om de route weer te geven.
  */
 
 public class RouteListAdapter extends ArrayAdapter<String> {
@@ -36,6 +36,10 @@ public class RouteListAdapter extends ArrayAdapter<String> {
         this.data = Data;
         getData();
     }
+
+    /**
+     *  Haal de data op die meegegeven is.
+     */
 
     private void getData(){
 
@@ -80,6 +84,10 @@ public class RouteListAdapter extends ArrayAdapter<String> {
         return rowView;
     }
 
+    /**
+     *  Haal de vertragingen op en laat ze zien.
+     */
+
     private void getVertragingen(){
 
         try {
@@ -89,6 +97,12 @@ public class RouteListAdapter extends ArrayAdapter<String> {
             e.printStackTrace();
         }
     }
+
+    /**
+     *  Initialiseer alle views.
+     *  Vul de text van de views met de goede data.
+     *  Pas de grootte van de text aan, aan de hand van of het een overstap is.
+     */
 
     private void SetTextViews(int position){
 
@@ -111,6 +125,10 @@ public class RouteListAdapter extends ArrayAdapter<String> {
         } station.setText(Station[position]);
     }
 
+    /**
+     *  Check of er een vertraging is bij het vertrekken, zoja laat die zien.
+     */
+
     private void checkVertragingVertrek() {
 
         if (!vertrek.equals(vertrekVertraging)) {
@@ -119,6 +137,10 @@ public class RouteListAdapter extends ArrayAdapter<String> {
         }
     }
 
+    /**
+     *  Check of er een vertraging is bij de aankomst, zoja laat die zien.
+     */
+
     private void checkVertragingAankomst(){
 
         if (!aankomst.equals(aankomstVertraging)) {
@@ -126,6 +148,10 @@ public class RouteListAdapter extends ArrayAdapter<String> {
             vertrekTijd.setPaintFlags(vertrekTijd.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }
+
+    /**
+     *  Initialiseer arrays voor de views.
+     */
 
     private void setArrays(){
 

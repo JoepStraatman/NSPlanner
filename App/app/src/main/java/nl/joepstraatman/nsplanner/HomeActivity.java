@@ -23,6 +23,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * De activiteit waar je altijd op begint, en waar je een nieuwe reis kan maken of een
+ * recente/favoriete reis kan kiezen.
+ */
+
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseAuth authTest;
@@ -45,6 +50,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         openAdapter();
     }
 
+    /**
+     * Maak de logout button rechts boven in de titelbalk.
+     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -54,6 +62,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Zorgt ervoor dat de gebruiker wordt uitgelogd als er op de button geklikt wordt.
+     */
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.mybutton) {
@@ -62,7 +75,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    //Go to the Main class. Called after login is complete.
+    /**
+     *  De logout functie die de status van de user veranderd, en door gaat naar de LoginActivity.
+     */
+
     public void logout(){
 
         authTest.signOut();
@@ -72,6 +88,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
+    /**
+     *  De onclick listener voor de buttons.
+     */
+
     public void onClick( View v ) {
 
         if ( v.getId() == R.id.Favoriet) {
@@ -80,6 +100,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             startActivity( new Intent(HomeActivity.this, ReisActivity.class));finish();
         }
     }
+
+    /**
+     *  Open de adapter voor de listview.
+     */
 
     public void openAdapter(){
 
@@ -95,6 +119,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             });
         }
 
+    /**
+     *  Ga naar de RouteActivity.
+     */
+
     public void goToRoute(int pos){
 
         Intent i = new Intent(this, RoutePlanActivity.class);
@@ -102,6 +130,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(i);
         finish();
     }
+
+    /**
+     *  Haal data uit firebase en zet het in de adapter.
+     */
 
     public void getRouteFromFirebase(){
 
