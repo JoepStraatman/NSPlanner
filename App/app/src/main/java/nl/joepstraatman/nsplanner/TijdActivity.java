@@ -32,6 +32,7 @@ import java.util.Map;
 
 /**
  * De activiteit waarin de tijden van de mogelijke reizen worden weergegeven.
+ * Door Joep Straatman
  */
 
 public class TijdActivity extends AppCompatActivity {

@@ -23,6 +23,7 @@ import java.util.List;
 
 /**
  * De adapter voor de FavorietenActivity om de verschillende favorieten weer te geven.
+ * Door Joep Straatman
  */
 
 public class FavorietenListAdapter extends ArrayAdapter<String> {

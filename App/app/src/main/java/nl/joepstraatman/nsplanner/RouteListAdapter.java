@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 /**
  *  De adapter voor de RouteActivity om de route weer te geven.
+ *  Door Joep Straatman
  */
 
 public class RouteListAdapter extends ArrayAdapter<String> {

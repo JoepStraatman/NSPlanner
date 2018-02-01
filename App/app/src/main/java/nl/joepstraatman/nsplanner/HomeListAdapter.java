@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  *  De adapter voor de HomeActivity om de verschillende recente reizen weer te geven.
+ *  Door Joep Straatman
  */
 
 public class HomeListAdapter extends ArrayAdapter<String> {

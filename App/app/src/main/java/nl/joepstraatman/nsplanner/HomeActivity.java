@@ -26,6 +26,7 @@ import java.util.List;
 /**
  * De activiteit waar je altijd op begint, en waar je een nieuwe reis kan maken of een
  * recente/favoriete reis kan kiezen.
+ * Door Joep Straatman
  */
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener{

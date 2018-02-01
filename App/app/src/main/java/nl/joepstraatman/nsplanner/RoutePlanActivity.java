@@ -47,6 +47,7 @@ import java.util.Map;
 
 /**
  *  De activiteit waar de opgeslagen route geladen wordt.
+ *  Door Joep Straatman
  */
 
 public class RoutePlanActivity extends AppCompatActivity implements View.OnClickListener{

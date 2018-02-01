@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 /**
  * De adapter voor de TijdActivity om de verschillende reizentijden weer te geven.
+ * Door Joep Straatman
  */
 
 public class TijdListAdapter extends ArrayAdapter<String> {

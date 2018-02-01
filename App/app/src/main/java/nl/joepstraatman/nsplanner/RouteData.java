@@ -2,6 +2,7 @@ package nl.joepstraatman.nsplanner;
 
 /**
  *  De data class waar data uit firebase makkelijk in kan worden opgehaald.
+ *  Door Joep Straatman
  */
 
 public class RouteData {

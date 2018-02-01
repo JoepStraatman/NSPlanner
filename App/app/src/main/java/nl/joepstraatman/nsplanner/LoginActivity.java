@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 /**
  * De activiteit waar een gebruiker zichzelf kan registeren of inloggen voor de app.
+ * Door Joep Straatman
  */
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{

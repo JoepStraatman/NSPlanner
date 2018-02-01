@@ -42,6 +42,7 @@ import java.util.Map;
 
 /**
  * De activiteit waar de reis of overstap gepland kan worden.
+ * Door Joep Straatman
  */
 
 public class ReisActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{

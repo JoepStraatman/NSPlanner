@@ -23,6 +23,7 @@ import java.util.List;
 
 /**
  * De activiteit waar de favorieten worden opgehaald en worden laten zien.
+ * Door Joep Straatman
  */
 
 public class FavorietenActivity extends AppCompatActivity {

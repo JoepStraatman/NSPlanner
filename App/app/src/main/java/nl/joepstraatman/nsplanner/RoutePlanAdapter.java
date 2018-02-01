@@ -23,7 +23,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by joeps on 25-1-2018.
+ *  Adapter die de opgeslagen route laat zien.
+ *  Door Joep Straatman
  */
 
 public class RoutePlanAdapter extends ArrayAdapter<String> {

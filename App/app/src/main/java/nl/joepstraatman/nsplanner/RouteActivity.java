@@ -30,6 +30,7 @@ import java.util.Calendar;
 
 /**
  * De activiteit waarin de gekozen route wordt weergegeven.
+ * Door Joep Straatman
  */
 
 public class RouteActivity extends AppCompatActivity implements View.OnClickListener{
