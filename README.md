@@ -42,6 +42,10 @@ Routeinformatie op een nette manier weergeven.
 
 ![alt text](https://github.com/JoepStraatman/NSPlanner/blob/master/doc/Schets2.png?raw=true)
 
+## Screenshots:
+
+<img src="https://github.com/JoepStraatman/NSPlanner/blob/master/doc/Screenshot_20180201-163517.png?raw=true" width="290"> <img src="https://github.com/JoepStraatman/NSPlanner/blob/master/doc/Screenshot_20180201-163457.png?raw=true" width="290"> <img src="https://github.com/JoepStraatman/NSPlanner/blob/master/doc/Screenshot_20180201-163436.png?raw=true" width="290">
+
 Bettercodehub: <br/>
 [![BCH compliance](https://bettercodehub.com/edge/badge/JoepStraatman/NSPlanner?branch=master)](https://bettercodehub.com/)
 
