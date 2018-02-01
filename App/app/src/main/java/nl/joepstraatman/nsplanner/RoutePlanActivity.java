@@ -3,6 +3,7 @@ package nl.joepstraatman.nsplanner;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -59,11 +60,14 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<String> tijddatumList = new ArrayList<>();
     private ArrayList<String> naarList = new ArrayList<>();
     private ArrayList<String> vanList = new ArrayList<>();
+    private ArrayList<String> vertragingList = new ArrayList<>();
     private JSONArray ja_data, filterOverstap, overstappen = null;
     private CheckBox favo;
+    private JSONObject overstapObj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_plan);
         authTest = FirebaseAuth.getInstance();
@@ -87,6 +91,7 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -102,6 +107,7 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
 
     //Go to the Main class. Called after login is complete.
     public void logout(){
+
         authTest.signOut();
         Log.d("Signout", "onAuthStateChanged:signed_out2");
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -132,6 +138,7 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void laadDataIn(){
+
         Bundle extras = getIntent().getExtras();
         naam = extras.getString("name");
         TextView titelnaam = findViewById(R.id.titelnaam);
@@ -139,6 +146,7 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void getRouteFromFirebase(){
+
         ValueEventListener postListener = new ValueEventListener() {
 
             @Override
@@ -167,6 +175,7 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void saveFirebasedata(RouteData routeData){
+
         if (!ritnummerList.contains(routeData.Ritnummer)) {
             ritnummerList.add(routeData.Ritnummer);
             tijddatumList.add(routeData.TijdDatum);
@@ -176,30 +185,45 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void openAdapter(){
-        adapter = new RoutePlanAdapter(this,stationlijst, vertreklijst, spoorlijst);
+
+        adapter = new RoutePlanAdapter(this,stationlijst, vertreklijst, spoorlijst, vertragingList);
         ListView list = findViewById(R.id.routeplanlist);
         list.setAdapter(adapter);
     }
 
-    private void addToList(){
+    private void addToList() {
+
         adapter.notifyDataSetChanged();
     }
 
     private void getFromApiLoop(){
-        for (int i = 0; i < ritnummerList.size(); i++){
+
+        for ( int i = 0; i < ritnummerList.size(); i++){
             Log.d("ritnummertje",ritnummerList.get(i));
-            doRequestQueue(i);
+
+            Handler handler = new Handler();
+            final int finalI = i;
+            handler.postDelayed(new Runnable(){
+
+                @Override
+                public void run() {
+                    doRequestQueue(finalI);
+                }
+            }, 500);
         }
 
     }
 
     private void doRequestQueue(final int i){
+
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, getUrl(i), new Response.Listener<String>() {
+
             @Override
             public void onResponse(String response) {
                 jsonparser(response, ritnummerList.get(i));
             }}, new com.android.volley.Response.ErrorListener() {
+
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println(error);}
@@ -221,11 +245,13 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
     }
 
     private String getUrl(int i){
+
         return "http://webservices.ns.nl/ns-api-treinplanner?fromStation="+vanList.get(i)+"&toStation="+
                 naarList.get(i)+"&dateTime="+tijddatumList.get(i);
     }
 
     public void jsonparser(String response, final String ritnummer){
+
         String newResponse = printResponse(response);
         try {
             JSONObject newjsonObj = new JSONObject(newResponse);
@@ -241,6 +267,7 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
     }
 
     public String printResponse(String response) {
+
         JSONObject jsonObj = null;
         try {
             jsonObj = XML.toJSONObject(response);
@@ -266,6 +293,7 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void getRitnummer(String ritnummer){
+
         for (int i = 0; i < filterOverstap.length(); i++){
             try {
                 JSONObject advies = new JSONObject(filterOverstap.getString(i));
@@ -285,9 +313,10 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
     private void giveToAdapter(String stringObj){
 
         try {
-            JSONObject overstapObj = new JSONObject(stringObj);
+            overstapObj = new JSONObject(stringObj);
             JSONObject reisdeel = new JSONObject(overstapObj.getString("ReisDeel"));
             overstappen = reisdeel.getJSONArray("ReisStop");
+            Log.d("overstaplijst",overstappen.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -297,19 +326,36 @@ public class RoutePlanActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void getItemsFromObject(int i){
+
         try {
             stationlijst.add(overstappen.getJSONObject(i).getString("Naam"));
             vertreklijst.add(overstappen.getJSONObject(i).getString("Tijd").substring(11,16));
             if (i == 0 || i == overstappen.length()-1){
                 spoorlijst.add(overstappen.getJSONObject(i).getJSONObject("Spoor").getString("content"));
                 adapter.addStationPosition(spoorlijst.size()-1);
+                getVertraging(i);
             } else {
                 spoorlijst.add("");
+                vertragingList.add("");
             }
             Log.d("statlijst", stationlijst.toString());
             addToList();
 
         } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getVertraging(int i){
+
+        try {
+            if (i == 0) {
+                vertragingList.add(overstapObj.getString("ActueleVertrekTijd").substring(11,16));
+            } else {
+                vertragingList.add(overstapObj.getString("ActueleAankomstTijd").substring(11,16));
+            }
+        }
+        catch (JSONException e) {
             e.printStackTrace();
         }
     }
