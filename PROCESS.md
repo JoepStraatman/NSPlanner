@@ -43,3 +43,16 @@ Code al deels gewhitespaced en wat gecommente tekst weggehaald.
 
 ## day 12
 Favorieten scherm
+Verwijderen van favorieten en opslaan werkt nu.
+Tijd/ datum knoppen plus popups.
+
+## day 13
+Code opgeschoont.
+Veel layout veranderd en verbeterd.
+Bezig geweest met nog een firebase bugg.
+
+## day 14
+Meer en betere comments toegevoegd.
+Code verbeterd en verkort.
+Vertragingen in routeplan opgenomen
+volgorde van firebase vertraagd om het nu wel in de goede volgorde te laten zien.
