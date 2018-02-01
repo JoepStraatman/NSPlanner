@@ -44,8 +44,8 @@ Routeinformatie op een nette manier weergeven.
 
 ## Screenshots:
 
-<img src="https://github.com/JoepStraatman/NSPlanner/blob/master/doc/Screenshot_20180201-163517.png?raw=true width="100">
-<img src="https://github.com/JoepStraatman/NSPlanner/blob/master/doc/Screenshot_20180201-163457.png?raw=true width="100">
+<img src="https://github.com/JoepStraatman/NSPlanner/blob/master/doc/Screenshot_20180201-163517.png?raw=true" width="100">
+<img src="https://github.com/JoepStraatman/NSPlanner/blob/master/doc/Screenshot_20180201-163457.png?raw=true" width="100">
 <img src="https://github.com/JoepStraatman/NSPlanner/blob/master/doc/Screenshot_20180201-163436.png?raw=true" width="100">
 
 Bettercodehub: <br/>
