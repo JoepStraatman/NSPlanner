@@ -44,3 +44,6 @@ Routeinformatie op een nette manier weergeven.
 
 Bettercodehub: <br/>
 [![BCH compliance](https://bettercodehub.com/edge/badge/JoepStraatman/NSPlanner?branch=master)](https://bettercodehub.com/)
+
+Copyright (c) 2018, Joep Straatman<br/>
+All rights reserved.
