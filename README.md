@@ -1,6 +1,10 @@
 # NSPlanner
 ### Door: Joep Straatman
 Android project: <br/>
+
+Product video: <br/>
+https://www.youtube.com/watch?v=3CFnAQ5xoAM&feature=youtu.be
+
 Het probleem:<br/>
 
 Op dit moment zijn er 2 grote apps waar je reisinformatie kan opvragen. De NS app en 9292. Op beide sites kan je dus een route vinden om van A naar B te komen. Echter soms wil je een specifieke route afgaan. Nou heb je wel de mogelijkheid om te kiezen dat je via een station gaat, maar kan je niet precies de route zelf uitstippelen die je wilt. 
